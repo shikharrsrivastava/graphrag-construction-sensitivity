@@ -1,0 +1,7 @@
+method,k,question_seed_pairs,mean_retrieval_jaccard,sd_retrieval_jaccard,median_retrieval_jaccard
+leiden_community,5,22500,0.9195052910052911,0.17242226544002925,1.0
+leiden_community,10,22500,0.8576478817478816,0.19735581035249417,1.0
+one_hop_graph,5,22500,1.0,0.0,1.0
+one_hop_graph,10,22500,1.0,0.0,1.0
+tfidf_baseline,5,22500,1.0,0.0,1.0
+tfidf_baseline,10,22500,1.0,0.0,1.0

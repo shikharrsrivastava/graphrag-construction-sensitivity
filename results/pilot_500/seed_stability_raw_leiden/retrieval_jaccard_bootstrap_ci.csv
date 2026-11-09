@@ -1,0 +1,7 @@
+method,k,n_independent_questions,mean_question_level_jaccard,sd_question_level_jaccard,ci95_percentile_low,ci95_percentile_high,bootstrap_resamples,bootstrap_seed
+leiden_community,5,500,0.9195052910052909,0.13364148276480733,0.9075509523809524,0.9308805555555555,10000,2027
+leiden_community,10,500,0.8576478817478816,0.16106160583115672,0.8434636315028472,0.8716291655530382,10000,2027
+one_hop_graph,5,500,1.0,0.0,1.0,1.0,10000,2027
+one_hop_graph,10,500,1.0,0.0,1.0,1.0,10000,2027
+tfidf_baseline,5,500,1.0,0.0,1.0,1.0,10000,2027
+tfidf_baseline,10,500,1.0,0.0,1.0,1.0,10000,2027

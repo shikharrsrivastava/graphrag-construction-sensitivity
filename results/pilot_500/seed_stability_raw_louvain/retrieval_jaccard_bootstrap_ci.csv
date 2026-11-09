@@ -1,0 +1,7 @@
+method,k,n_independent_questions,mean_question_level_jaccard,sd_question_level_jaccard,ci95_percentile_low,ci95_percentile_high,bootstrap_resamples,bootstrap_seed
+louvain_community,5,500,0.9095349206349206,0.1448249512817704,0.8963766666666666,0.9219812698412698,10000,2027
+louvain_community,10,500,0.8482141803004549,0.1670393043326131,0.8335258557256107,0.8626777939018135,10000,2027
+one_hop_graph,5,500,1.0,0.0,1.0,1.0,10000,2027
+one_hop_graph,10,500,1.0,0.0,1.0,1.0,10000,2027
+tfidf_baseline,5,500,1.0,0.0,1.0,1.0,10000,2027
+tfidf_baseline,10,500,1.0,0.0,1.0,1.0,10000,2027

@@ -1,0 +1,41 @@
+{
+  "manifest": {
+    "dataset": "hotpotqa/hotpot_qa",
+    "config": "distractor",
+    "split": "validation",
+    "requested_question_limit": 50,
+    "loaded_questions": 50,
+    "unique_passages": 492,
+    "stream_shuffle_seed": 42,
+    "note": "Gold supporting labels are stored in questions.json and are for evaluation only; they are not used to construct the graph."
+  },
+  "question_count": 50,
+  "unique_question_ids": 50,
+  "passage_count": 492,
+  "difficulty_distribution": {
+    "hard": 50
+  },
+  "question_type_distribution": {
+    "bridge": 37,
+    "comparison": 13
+  },
+  "gold_support_count_distribution": {
+    "2": 50
+  },
+  "graph": {
+    "nodes": 3216,
+    "edges": 7240,
+    "mean_degree": 4.502487562189055,
+    "density": 0.0014004626943045272,
+    "components": 541,
+    "largest_component_nodes": 1982,
+    "largest_component_fraction": 0.6162935323383084,
+    "isolates": 272,
+    "degree_le_2": 1220,
+    "edge_weight_min": 1.0,
+    "edge_weight_median": 1.0,
+    "edge_weight_mean": 1.0645027624309393,
+    "edge_weight_max": 8.0,
+    "construction_rule": "NER entities as nodes; entities co-occurring in the same sentence are connected; edge weight is co-occurrence count."
+  }
+}

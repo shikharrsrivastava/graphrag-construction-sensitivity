@@ -1,0 +1,10 @@
+{
+  "dataset": "hotpotqa/hotpot_qa",
+  "config": "distractor",
+  "split": "validation",
+  "requested_question_limit": 15,
+  "loaded_questions": 15,
+  "unique_passages": 150,
+  "stream_shuffle_seed": 42,
+  "note": "Gold supporting labels are stored in questions.json and are for evaluation only; they are not used to construct the graph."
+}

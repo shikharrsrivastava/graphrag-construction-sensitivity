@@ -1,0 +1,7 @@
+method,k,contrast,n_independent_questions,mean_paired_jaccard_difference,ci95_percentile_low,ci95_percentile_high,questions_more_stable,questions_less_stable,questions_tied,bootstrap_resamples,bootstrap_seed,interpretation
+louvain_community,5,same_passage - same_sentence,50,-0.016867724867724865,-0.05621216931216932,0.01856137566137566,11,11,28,10000,2027,exploratory; unadjusted for multiple k comparisons
+louvain_community,10,same_passage - same_sentence,50,-0.04792125956831839,-0.09650362154185683,-0.0014485292485292673,17,19,14,10000,2027,exploratory; unadjusted for multiple k comparisons
+one_hop_graph,5,same_passage - same_sentence,50,0.0,0.0,0.0,0,0,50,10000,2027,exploratory; unadjusted for multiple k comparisons
+one_hop_graph,10,same_passage - same_sentence,50,0.0,0.0,0.0,0,0,50,10000,2027,exploratory; unadjusted for multiple k comparisons
+tfidf_baseline,5,same_passage - same_sentence,50,0.0,0.0,0.0,0,0,50,10000,2027,exploratory; unadjusted for multiple k comparisons
+tfidf_baseline,10,same_passage - same_sentence,50,0.0,0.0,0.0,0,0,50,10000,2027,exploratory; unadjusted for multiple k comparisons

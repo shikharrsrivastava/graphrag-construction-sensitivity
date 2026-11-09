@@ -1,0 +1,2 @@
+method,seed_pairs,mean_pairwise_ari,sd_pairwise_ari,mean_pairwise_nmi,sd_pairwise_nmi,min_pairwise_ari,max_pairwise_ari
+louvain,10,0.8617086102933126,0.04270971691458784,0.9741080553047299,0.0080048331109179,0.8031209749690191,0.9375623235117044

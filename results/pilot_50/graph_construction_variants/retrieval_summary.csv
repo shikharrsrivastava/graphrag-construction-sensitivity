@@ -1,0 +1,13 @@
+variant,method,k,n_questions,recall_at_k_mean,recall_at_k_sd,candidate_pool_size_mean,candidate_generation_recall_mean,all_gold_retrieved_rate
+same_passage,louvain_community,5,50,0.8220000000000001,0.23693622667334788,64.056,0.9570000000000001,0.644
+same_passage,louvain_community,10,50,0.937,0.16438195938553768,64.056,0.9570000000000001,0.8740000000000001
+same_passage,one_hop_graph,5,50,0.85,0.23145502494313785,138.64,0.98,0.7
+same_passage,one_hop_graph,10,50,0.96,0.1370237578089348,138.64,0.98,0.92
+same_passage,tfidf_baseline,5,50,0.79,0.24928469095164493,492.0,1.0,0.58
+same_passage,tfidf_baseline,10,50,0.96,0.1370237578089348,492.0,1.0,0.92
+same_sentence,louvain_community,5,50,0.8390000000000001,0.22818941290792896,76.04,0.951,0.6779999999999999
+same_sentence,louvain_community,10,50,0.9309999999999999,0.1634731457694355,76.04,0.951,0.862
+same_sentence,one_hop_graph,5,50,0.83,0.23925906034920325,96.68,0.95,0.66
+same_sentence,one_hop_graph,10,50,0.93,0.17525491637693283,96.68,0.95,0.86
+same_sentence,tfidf_baseline,5,50,0.79,0.24928469095164493,492.0,1.0,0.58
+same_sentence,tfidf_baseline,10,50,0.96,0.1370237578089348,492.0,1.0,0.92

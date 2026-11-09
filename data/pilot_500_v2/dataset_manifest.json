@@ -1,0 +1,37 @@
+{
+  "dataset": "hotpotqa/hotpot_qa",
+  "config": "distractor",
+  "split": "validation",
+  "requested_question_limit": 500,
+  "loaded_questions": 500,
+  "unique_question_ids": 500,
+  "unique_passages": 4947,
+  "stream_shuffle_seed": 2027,
+  "shuffle_buffer_size": 10000,
+  "difficulty_distribution": {
+    "hard": 500
+  },
+  "question_type_distribution": {
+    "bridge": 404,
+    "comparison": 96
+  },
+  "gold_support_count_distribution": {
+    "2": 500
+  },
+  "context_passage_count_distribution": {
+    "10": 498,
+    "2": 2
+  },
+  "unique_context_passage_count_distribution": {
+    "10": 498,
+    "2": 2
+  },
+  "expected_context_passages_per_question": 10,
+  "questions_with_expected_context_count": 498,
+  "questions_with_all_gold_supports_in_context": 500,
+  "questions_with_missing_gold_support_titles": 0,
+  "total_question_context_slots": 4984,
+  "question_ids_sha256": "8440283bb8c1c0840680b57b580790555b9a341a3a54884027a14c0b5b42f810",
+  "sorted_passage_ids_sha256": "e5fba7d953f5c5c1bd091741a6e7bc902d4b6e8eac1f9d2f973b6014c645b8db",
+  "note": "question_contexts are preserved in original order. passages.json is the deduplicated global corpus. Gold labels are used only for evaluation."
+}

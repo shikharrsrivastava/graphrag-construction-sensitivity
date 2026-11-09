@@ -1,0 +1,22 @@
+{
+  "dataset": "hotpotqa/hotpot_qa",
+  "config": "distractor",
+  "split": "validation",
+  "requested_question_limit": 500,
+  "loaded_questions": 500,
+  "unique_question_ids": 500,
+  "unique_passages": 4947,
+  "stream_shuffle_seed": 2027,
+  "shuffle_buffer_size": 10000,
+  "difficulty_distribution": {
+    "hard": 500
+  },
+  "question_type_distribution": {
+    "bridge": 404,
+    "comparison": 96
+  },
+  "gold_support_count_distribution": {
+    "2": 500
+  },
+  "note": "Gold supporting labels are stored in questions.json and are for evaluation only; they are not used to construct the graph. The manifest records sample distributions to make any sampling imbalance visible."
+}

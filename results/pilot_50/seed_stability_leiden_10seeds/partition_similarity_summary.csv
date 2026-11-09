@@ -1,0 +1,2 @@
+method,seed_pairs,mean_pairwise_ari,sd_pairwise_ari,mean_pairwise_nmi,sd_pairwise_nmi,min_pairwise_ari,max_pairwise_ari
+leiden,45,0.8878010465310693,0.03383275782447678,0.9780901738987106,0.006117453599999759,0.8218832375959878,0.9548107961551038

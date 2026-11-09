@@ -1,0 +1,13 @@
+metric,k,comparison,n_paired_questions,mean_paired_difference,ci95_low,ci95_high,questions_positive,questions_negative,questions_tied,interpretation
+recall_at_k,5,one_hop_graph - tfidf_baseline,500,0.008,-0.004,0.02,22,14,464,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+recall_at_k,5,leiden_community - tfidf_baseline,500,0.0072,-0.005099999999999998,0.019600000000000003,40,22,438,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+recall_at_k,5,louvain_community - tfidf_baseline,500,0.0068000000000000005,-0.005499999999999998,0.019200000000000002,41,24,435,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,5,one_hop_graph - tfidf_baseline,500,0.016,-0.004,0.036,18,10,472,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,5,leiden_community - tfidf_baseline,500,0.0202,-0.002599999999999998,0.0436,35,15,450,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,5,louvain_community - tfidf_baseline,500,0.020599999999999997,-0.0011999999999999992,0.043,36,15,449,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+recall_at_k,10,one_hop_graph - tfidf_baseline,500,-0.018,-0.033,-0.003,19,35,446,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+recall_at_k,10,leiden_community - tfidf_baseline,500,-0.0209,-0.038400000000000004,-0.003300000000000001,40,51,409,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+recall_at_k,10,louvain_community - tfidf_baseline,500,-0.0182,-0.0354,-0.0013000000000000008,40,54,406,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,10,one_hop_graph - tfidf_baseline,500,-0.028,-0.056,0.0,19,33,448,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,10,leiden_community - tfidf_baseline,500,-0.024,-0.055,0.006400000000000001,40,46,414,"question-paired bootstrap; exploratory, not multiplicity-adjusted"
+all_gold_supports_rate,10,louvain_community - tfidf_baseline,500,-0.0196,-0.04959999999999999,0.0112,40,47,413,"question-paired bootstrap; exploratory, not multiplicity-adjusted"

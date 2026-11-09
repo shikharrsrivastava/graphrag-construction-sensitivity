@@ -1,0 +1,19 @@
+condition,k,comparison,n_independent_questions,mean_paired_recall_difference,ci95_percentile_low,ci95_percentile_high,questions_improved,questions_worsened,questions_tied,interpretation
+original,5,one_hop_graph - tfidf_baseline,50,0.04,-0.01,0.1,6,2,42,CI includes zero
+original,5,leiden_community - tfidf_baseline,50,0.044,-0.009999999999999998,0.1,7,3,40,CI includes zero
+original,5,louvain_community - tfidf_baseline,50,0.046,-0.006000000000000001,0.1,7,3,40,CI includes zero
+original,10,one_hop_graph - tfidf_baseline,50,-0.03,-0.08,0.01,1,4,45,CI includes zero
+original,10,leiden_community - tfidf_baseline,50,-0.034,-0.078,0.006000000000000001,1,6,43,CI includes zero
+original,10,louvain_community - tfidf_baseline,50,-0.034,-0.076,0.006000000000000001,1,6,43,CI includes zero
+random_5pct,5,one_hop_graph - tfidf_baseline,50,0.04,-0.01,0.09,6,2,42,CI includes zero
+random_5pct,5,leiden_community - tfidf_baseline,50,0.044000000000000004,-0.013999999999999999,0.102,7,3,40,CI includes zero
+random_5pct,5,louvain_community - tfidf_baseline,50,0.038,-0.016,0.094,7,3,40,CI includes zero
+random_5pct,10,one_hop_graph - tfidf_baseline,50,-0.03,-0.08,0.01,1,4,45,CI includes zero
+random_5pct,10,leiden_community - tfidf_baseline,50,-0.034,-0.078,0.008,1,6,43,CI includes zero
+random_5pct,10,louvain_community - tfidf_baseline,50,-0.04,-0.084,0.0019999999999999996,1,6,43,CI includes zero
+critical_edge_betweenness_5pct,5,one_hop_graph - tfidf_baseline,50,0.03,-0.03,0.09,6,3,41,CI includes zero
+critical_edge_betweenness_5pct,5,leiden_community - tfidf_baseline,50,0.048,-0.01,0.106,7,2,41,CI includes zero
+critical_edge_betweenness_5pct,5,louvain_community - tfidf_baseline,50,0.046,-0.01,0.102,7,2,41,CI includes zero
+critical_edge_betweenness_5pct,10,one_hop_graph - tfidf_baseline,50,-0.04,-0.1,0.01,2,6,42,CI includes zero
+critical_edge_betweenness_5pct,10,leiden_community - tfidf_baseline,50,-0.032,-0.07404999999999996,0.008,1,5,44,CI includes zero
+critical_edge_betweenness_5pct,10,louvain_community - tfidf_baseline,50,-0.034,-0.08,0.008000000000000002,1,5,44,CI includes zero

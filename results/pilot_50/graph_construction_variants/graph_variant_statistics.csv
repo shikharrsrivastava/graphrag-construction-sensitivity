@@ -1,0 +1,4 @@
+variant,nodes,edges,density,mean_degree,components,largest_component_nodes,largest_component_fraction,isolates,mean_edge_weight,max_degree,sentence_edges_also_in_passage_graph,edge_jaccard,passage_only_edges
+same_sentence,3216,7240,0.0014004626943045272,4.502487562189055,541.0,1982.0,0.6162935323383084,272.0,1.0645027624309393,179.0,,,
+same_passage,3216,22479,0.004348204544926998,13.979477611940299,27.0,3005.0,0.9343905472636815,0.0,1.0480893278170738,566.0,,,
+edge_comparison,3216,22479,,,,,,,,,7240.0,0.3220783842697629,15239.0

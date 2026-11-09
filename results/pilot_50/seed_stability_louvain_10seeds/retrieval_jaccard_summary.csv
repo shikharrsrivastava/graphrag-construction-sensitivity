@@ -1,0 +1,7 @@
+method,k,question_seed_pairs,mean_retrieval_jaccard,sd_retrieval_jaccard,median_retrieval_jaccard
+louvain_community,5,2250,0.9486137566137566,0.13926514593518222,1.0
+louvain_community,10,2250,0.9180560180560181,0.16742346939363853,1.0
+one_hop_graph,5,2250,1.0,0.0,1.0
+one_hop_graph,10,2250,1.0,0.0,1.0
+tfidf_baseline,5,2250,1.0,0.0,1.0
+tfidf_baseline,10,2250,1.0,0.0,1.0
