@@ -1,0 +1,13 @@
+context_count,n_questions,comparison,metric,mean_paired_difference,p_value,holm_adjusted_p
+10,498,question_local - shared_global_graph,recall_at_2,0.09236947791164658,4.999750012499375e-05,0.0002999850007499625
+10,498,question_local - shared_global_graph,recall_at_5,0.10341365461847389,4.999750012499375e-05,0.0002999850007499625
+10,498,question_local - shared_global_graph,recall_at_10,0.010040160642570281,0.0022998850057497125,0.004599770011499425
+10,498,question_local - shared_global_graph,complete_support_at_2,0.12248995983935743,4.999750012499375e-05,0.0002999850007499625
+10,498,question_local - shared_global_graph,complete_support_at_5,0.1827309236947791,4.999750012499375e-05,0.0002999850007499625
+10,498,question_local - shared_global_graph,complete_support_at_10,0.020080321285140562,0.0022998850057497125,0.004599770011499425
+2,2,question_local - shared_global_graph,recall_at_2,0.0,1.0,1.0
+2,2,question_local - shared_global_graph,recall_at_5,0.0,1.0,1.0
+2,2,question_local - shared_global_graph,recall_at_10,0.0,1.0,1.0
+2,2,question_local - shared_global_graph,complete_support_at_2,0.0,1.0,1.0
+2,2,question_local - shared_global_graph,complete_support_at_5,0.0,1.0,1.0
+2,2,question_local - shared_global_graph,complete_support_at_10,0.0,1.0,1.0

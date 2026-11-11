@@ -1,0 +1,36 @@
+{
+  "stage": "A",
+  "dataset": "data/pilot_500_v2",
+  "seed": 2027,
+  "primary": "498 ten-context questions, question-local corpus fit and ranking",
+  "variable_context": "2 questions, analyzed separately",
+  "track_A": "TF-IDF is fit independently on each question's contexts; candidate universe contains only those contexts",
+  "track_B": "the historical 4,947-passage entity co-occurrence graph generates candidates from local TF-IDF seeds; candidates are filtered to the question's contexts before ranking with shared-corpus TF-IDF statistics; cross-question graph and IDF information are shared",
+  "metrics": [
+    "Recall@2",
+    "Recall@5",
+    "Recall@10",
+    "complete supporting-evidence retrieval",
+    "candidate-generation recall"
+  ],
+  "candidate_generation_definition": "for Track A, gold evidence present in the entire context universe; for Track B, gold evidence present in graph-expanded context-filtered candidates",
+  "bootstrap": {
+    "unit": "question",
+    "replicates": 10000,
+    "confidence": 0.95
+  },
+  "paired_test": "two-sided paired sign-flip randomization test with 20,000 Monte Carlo permutations; Holm correction across six retrieval metrics within each context-count stratum",
+  "timing_definition": "ranking_seconds includes per-question local vectorizer fit/query/scoring on Track A; Track B records per-query global-index transform and candidate scoring only. One-time global-index fit, graph load, and graph candidate expansion are excluded; total wall time is recorded in logs/progress.md",
+  "software": {
+    "python": "3.13.7",
+    "scikit_learn": "1.9.1",
+    "numpy": "2.5.4"
+  },
+  "global_graph": "data/pilot_500/entity_graph.graphml",
+  "global_graph_construction": "NER entity nodes; same-sentence co-occurrence edges",
+  "global_graph_mapping_coverage": "4880/4947 passages have at least one extracted entity; absent mappings are treated as empty",
+  "question_count": 500,
+  "primary_question_count": 498,
+  "variable_context_question_count": 2,
+  "passage_count": 4947
+}
