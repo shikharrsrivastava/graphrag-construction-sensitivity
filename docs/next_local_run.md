@@ -1,8 +1,8 @@
-# Next Local Run — 500-question sample and Leiden validation
+# Historical Local Run Plan — 500-question sample and Leiden validation
 
-> **Historical handoff:** this file predates the validated Stage A and Phase B work. Its 500-question sampling/Leiden steps were superseded; do not treat them as the current next run. Use [`reproduction_guide.md`](reproduction_guide.md) for non-destructive reproduction of the canonical studies and [`research/PHASE_B_REVIEW_SUMMARY.md`](research/PHASE_B_REVIEW_SUMMARY.md) for current status.
+> **Historical instructions — not executable from the public aggregate-only checkout.** This handoff predates validated Stage A and Phase B. Its commands depend on raw HotpotQA files and exploratory outputs that are not published; several proposed steps have since been superseded. Keep this page as research history, not as a current run plan. Use [`reproduction_guide.md`](reproduction_guide.md) for current data preparation and canonical study reproduction, and [`research/PHASE_B_REVIEW_SUMMARY.md`](research/PHASE_B_REVIEW_SUMMARY.md) for current status.
 
-This file is the next practical handoff. The cleaned project archive intentionally excludes the machine-specific `.venv` from the uploaded ZIP. Run these commands on the Mac where the original project environment and model downloads are available.
+The commands below document the historical handoff only. They will not run from this public checkout without separately obtaining and preparing the required dataset and other local inputs.
 
 ## 1. Set up the environment
 

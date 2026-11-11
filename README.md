@@ -32,7 +32,9 @@ Graphs and indexes in the primary Phase B question-local track are created from 
 
 ## Dataset
 
-The experiments use HotpotQA `distractor` validation. The public release candidate excludes raw questions, passages, context mappings, and dataset-derived graphs; see [data preparation and licensing](data/README.md). The canonical local dataset had 500 questions, 4,947 deduplicated passages, 498 questions with ten contexts, and two with two contexts. All 500 had gold support in their supplied contexts. The primary 498 are all `hard` (404 bridge, 94 comparison); conclusions are limited to this fixed sample.
+The experiments use HotpotQA `distractor` validation. The public repository does not redistribute raw questions, benchmark passages, context mappings, or dataset-derived graphs; see [data preparation and licensing](data/README.md). The canonical local dataset had 500 questions, 4,947 deduplicated passages, 498 questions with ten contexts, and two with two contexts. All 500 had gold support in their supplied contexts. The primary 498 are all `hard` (404 bridge, 94 comparison); conclusions are limited to this fixed sample.
+
+Raw question-level retrieval records are also not redistributed. The published aggregates can be inspected, but complete metric recomputation requires independently obtaining and preparing HotpotQA as described in `data/README.md`, then rerunning the documented evaluation. The public checkout alone is not sufficient to recompute every reported metric from raw question-level records.
 
 The upstream HotpotQA dataset card identifies the dataset as CC BY-SA 4.0. Review the dataset and source-content terms before distributing data or derived caches. The code repository itself currently has **no project-level `LICENSE`**; no license has been selected for original code. Model weights are not included; Phase B fetches the pinned BGE model snapshot when needed.
 
@@ -75,7 +77,7 @@ The independent Phase B audit was run against local raw per-question records and
 - Passage-level binary weighting, alternate sparsification controls, sentence-node graphs, entity-semantic graphs, entity-passage bipartite graphs, alias-resolution ablations, local community retrieval, and validated typed relations remain untested.
 - No answer generation, Exact Match, token F1, evidence faithfulness, or manual faithfulness review has been performed.
 - LightRAG/Microsoft GraphRAG and Contriever have not been run.
-- The project has no selected code license or maintainer email. Reachable historical commits contain workstation paths. An earlier 29 MB review bundle exists in an unreachable local commit and is not part of current `main` history. Review the historical-data/licensing and history-exposure issues before publication.
+- The project has no selected code license or published maintainer email. The published Git history has been sanitized; local review bundles are not included in the repository. Dataset and model terms remain separate from any future project code license.
 - The dataset and BGE model carry their own upstream terms; do not apply a future code license to them without checking compatibility.
 
 Future research should add controlled repeated runs where a real source of stochasticity exists, validate entity extraction with an annotation protocol, complete a small justified graph matrix, and only then evaluate fixed-model/prompt/decoding answer generation and manually reviewed evidence faithfulness. Evaluate an established GraphRAG baseline after the retrieval pipeline and answer protocol are ready.
@@ -109,7 +111,7 @@ src/                          Experiment and validation modules
 tests/                        Unit tests
 ```
 
-The public release candidate keeps aggregate canonical findings while excluding raw per-question outputs and local research inputs. See [the release inventory](PUBLIC_RELEASE_INVENTORY.md) for the proposed scope. Reproduction commands require a locally obtained HotpotQA sample and the pinned BGE model; the included loader's seed does not guarantee the original sample if upstream data or library behavior has changed.
+The public repository keeps aggregate canonical findings while excluding raw per-question outputs and local research inputs. See [the release inventory](PUBLIC_RELEASE_INVENTORY.md) for the published scope. Reproduction commands require a locally obtained HotpotQA sample and the pinned BGE model; the included loader's seed does not guarantee the original sample if upstream data or library behavior has changed.
 
 Do not interpret every file under `results/` as a final result. Canonical runs and preserved failed/superseded artifacts are labelled in [docs/experimental_design.md](docs/experimental_design.md) and the validation reports.
 
@@ -126,4 +128,4 @@ If you use the benchmark, cite HotpotQA:
 }
 ```
 
-For this research code, cite the repository and its release commit after a public repository and citation metadata have been established. No public GitHub remote or contact email is configured in this checkout; use the repository’s Issues page after publication for project questions.
+For this research code, cite the repository and the relevant release commit. No maintainer email is published; use the repository’s [Issues page](https://github.com/shikharrsrivastava/graphrag-construction-sensitivity/issues) for project questions.
