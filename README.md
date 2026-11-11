@@ -1,187 +1,129 @@
-# GraphRAG Clustering Robustness — Starter Research Prototype
+# Graph Construction Sensitivity and Evidence Retrieval
 
-**Provisional working title:** *Graph Construction Sensitivity and Evidence Retrieval in Multi-Hop QA*
+An empirical research repository studying how graph construction choices affect evidence retrieval for multi-hop question answering. The repository contains historical pooled-corpus experiments, a validated question-local TF-IDF baseline (Stage A), and an independently audited BGE and question-local graph comparison (Phase B).
 
-This repository is a starter for a small, reproducible pilot studying whether graph-community stability under edge removal is associated with preservation of evidence for multi-hop question answering.
+> **Research status:** Retrieval experiments are complete for the saved 498-question primary sample. Generated answers, answer accuracy, faithfulness, and an established GraphRAG system have not been evaluated. This is not a completed GraphRAG architecture and does not establish broad generalization beyond the sampled HotpotQA questions.
 
-## Research question
+## Research motivation and question
 
-When relationships in an entity co-occurrence graph are removed, do community-detection methods that preserve more stable partitions also preserve the evidence needed for multi-hop question answering?
+Multi-hop QA requires retrieving evidence from more than one document. Graph-based retrieval depends on choices such as node type, edge definition, weighting, and sparsification. This project measures how those choices affect whether gold supporting passages remain in a question’s retrieval candidate set and top-k results.
 
-## Scope and honesty
+**Central question:** How do graph construction choices affect evidence retrieval for multi-hop questions, and what additional work is needed to connect retrieval robustness to generated-answer reliability?
 
-This is an **early experimental scaffold**, not a completed GraphRAG system or a claim of research novelty. The initial scripts load a small HotpotQA sample, build a spaCy entity-co-occurrence graph, run Leiden and Louvain, perturb edges, and report structural measurements. **A preliminary TF-IDF-seeded, TF-IDF-reranked supporting-evidence retrieval pilot is implemented and saved for 15- and 50-question samples. Dense retrieval and generated-answer evaluation are not implemented in this prototype.** Do not describe this as a complete GraphRAG system or use graph metrics alone as proof of answer robustness.
+Objectives:
 
-The graph construction is intentionally lightweight: named entities recognized by `en_core_web_sm` are nodes; entities appearing in the same sentence are connected, with edge weight counting co-occurrences. This is a proxy graph, not a gold knowledge graph. NER omissions and entity-resolution errors will affect results.
+1. Establish lexical and dense passage-retrieval references under controlled context limits.
+2. Compare question-local entity co-occurrence and chunk similarity graph candidate generation.
+3. Report passage recall, complete supporting-evidence retrieval, candidate recall, graph structure, uncertainty, paired inference, and efficiency.
+4. Preserve historical pooled-corpus findings separately from question-local findings.
+5. Identify the evidence required before drawing conclusions about answer quality or faithfulness.
 
-## Status
+## Experimental architecture
 
-| Component | Status |
-|---|---|
-| Load a fixed-size HotpotQA distractor validation sample | Implemented in starter script; requires dependencies and dataset access |
-| Save passages and gold supporting-fact labels separately | Implemented |
-| Build entity co-occurrence graph with spaCy | Implemented |
-| Run Leiden and Louvain on the same graph | Implemented |
-| Random and high-edge-betweenness edge removal | Implemented |
-| ARI, largest connected component fraction, community connectivity | Implemented |
-| CSV summaries and structural-stability plot | Implemented |
-| k-core hierarchy comparison | Planned |
-| TF-IDF-seeded graph candidate retrieval / supporting-fact Recall@k | Implemented; 15- and 50-question pilot outputs saved |
-| Dense retrieval (Contriever/BGE) | Planned |
-| Answer generation / HotpotQA EM and F1 / faithfulness | Planned |
-| Literature-backed novelty claim | Not established |
+The repository has three distinct experiment families:
 
-## Setup (macOS / Python)
+| Family | Data and graph scope | Purpose | Status |
+|---|---|---|---|
+| Historical pooled-corpus studies | Earlier 15-, 50-, and 500-question data; a single graph/partition may pool passages across questions | Leiden/Louvain communities, perturbations, construction variants, and TF-IDF-seeded retrieval | Exploratory/historical; not question-local distractor evaluation. |
+| Stage A | 498 ten-context primary questions from `data/pilot_500_v2`; separately reports two variable-context questions | Local TF-IDF retrieval; secondary shared-global-graph comparison | Completed and validated. |
+| Phase B | The same 498 ten-context primary questions; graph and candidates rebuilt independently from each question’s ten contexts | TF-IDF, BGE, four entity graph variants, and BGE chunk kNN graph | Pilot of 50 and full 498 completed; raw-output audit passed. |
 
-Python 3.11 or 3.12 is a conservative choice for a research environment. A compatible Python 3.13 setup may also work depending on the versions available for your platform.
+Graphs and indexes in the primary Phase B question-local track are created from only the current question’s allowed passages. The secondary Stage A shared-global-graph track reuses a pooled graph and corpus TF-IDF statistics, then filters candidates to each question’s contexts; it is explicitly not question-local graph construction.
+
+## Dataset
+
+The experiments use HotpotQA `distractor` validation. The public release candidate excludes raw questions, passages, context mappings, and dataset-derived graphs; see [data preparation and licensing](data/README.md). The canonical local dataset had 500 questions, 4,947 deduplicated passages, 498 questions with ten contexts, and two with two contexts. All 500 had gold support in their supplied contexts. The primary 498 are all `hard` (404 bridge, 94 comparison); conclusions are limited to this fixed sample.
+
+The upstream HotpotQA dataset card identifies the dataset as CC BY-SA 4.0. Review the dataset and source-content terms before distributing data or derived caches. The code repository itself currently has **no project-level `LICENSE`**; no license has been selected for original code. Model weights are not included; Phase B fetches the pinned BGE model snapshot when needed.
+
+## Methods and configurations
+
+### Stage A
+
+The primary Stage A track fits a fresh TF-IDF vectorizer per question over its ten allowed passage title/text fields and ranks only those ten passages. The separate secondary track starts from local TF-IDF seeds, expands them using the historical pooled entity graph, filters candidates to the question’s contexts, then reranks with corpus-wide TF-IDF statistics. Its graph and inverse-document-frequency information are shared across questions.
+
+For the 498 primary questions, local TF-IDF achieved Recall@2 **0.658** (95% question-bootstrap CI 0.632–0.683), Recall@5 **0.836** (0.814–0.858), Recall@10 **1.000**, and complete gold-support retrieval at 5 **0.689** (0.649–0.729). The shared-global-graph track achieved Recall@2 **0.565** (0.538–0.591), Recall@5 **0.733** (0.708–0.758), and complete support@5 **0.506** (0.462–0.550). The two two-context questions are reported separately in the Stage A outputs. These summary CIs are question-level percentile bootstrap intervals.
+
+### Phase B
+
+The dense model is `BAAI/bge-small-en-v1.5`, pinned in code to revision `5c38ec7c405ec4b44b94cc5a9bb96e735b38267a`, with 384-dimensional L2-normalized embeddings. Similarity is dot product of normalized vectors (cosine-equivalent). Entity graphs use sentence-level or passage-level co-occurrence; sentence edges are tested with frequency weights, binary weights, and a deterministic strongest-half sparsification. The chunk graph connects each passage node to its two nearest BGE neighbors using an undirected union-kNN rule.
+
+| Configuration | Recall@2 | Recall@5 | Candidate-generation recall | Complete support@10 |
+|---|---:|---:|---:|---:|
+| Local TF-IDF | 0.658 | 0.836 | 1.000 | 1.000 |
+| Vanilla BGE | 0.748 | 0.906 | 1.000 | 1.000 |
+| Entity sentence, frequency weighted | 0.748 | 0.906 | 0.984 | 0.968 |
+| Entity passage, frequency weighted | 0.748 | 0.906 | 0.984 | 0.968 |
+| Entity sentence, binary | 0.748 | 0.906 | 0.984 | 0.968 |
+| Entity sentence, strongest half | 0.748 | 0.906 | 0.984 | 0.968 |
+| BGE chunk union-kNN, k=2 | 0.748 | 0.906 | 0.997 | 0.994 |
+
+The means are over 498 questions. Graph methods use BGE’s top five passages as seeds and BGE scores to rerank graph-generated candidates. Thus, the graphs affect candidate generation; they do not add a graph score or community-ranking stage. Detailed results and confidence intervals are in [the Phase B validation report](results/dense_graph_v1/PHASE_B_VALIDATION.md) and the [consolidated research review](docs/research/PHASE_B_REVIEW_SUMMARY.md).
+
+## Statistics and validation
+
+Question is the independent unit. Stage A and Phase B use 10,000 question bootstrap replicates and percentile 95% intervals. Phase B paired differences use a two-sided sign-flip Monte Carlo test (20,000 draws, plus-one p correction) and Holm correction across 69 pre-specified method/outcome comparisons. Stage A reports paired comparisons separately by context stratum.
+
+The independent Phase B audit was run against local raw per-question records and caches, reconstructing question-local graphs, candidates, rankings, metrics, structural statistics, and inference. It found zero out-of-context candidates/rankings, graph-scope violations, or metric/denominator mismatches in either run. Aggregate audit reports are included; the raw inputs used to recompute them are excluded from this release candidate. The full suite contains 25 tests, including a guard for the pinned model revision.
+
+## Limitations and future work
+
+- The sample is fixed and all-hard; it does not support population-wide claims.
+- The Stage A shared-global-graph comparison shares graph and TF-IDF corpus statistics across questions; it is not a local graph condition.
+- Phase B uses one dense model and deterministic configurations. It does not measure same-configuration repeated-seed stability.
+- spaCy entity quality has not been measured against human labels; agreement with a legacy automatic mapping is not a gold evaluation.
+- Passage-level binary weighting, alternate sparsification controls, sentence-node graphs, entity-semantic graphs, entity-passage bipartite graphs, alias-resolution ablations, local community retrieval, and validated typed relations remain untested.
+- No answer generation, Exact Match, token F1, evidence faithfulness, or manual faithfulness review has been performed.
+- LightRAG/Microsoft GraphRAG and Contriever have not been run.
+- The project has no selected code license or maintainer email. Reachable historical commits contain workstation paths. An earlier 29 MB review bundle exists in an unreachable local commit and is not part of current `main` history. Review the historical-data/licensing and history-exposure issues before publication.
+- The dataset and BGE model carry their own upstream terms; do not apply a future code license to them without checking compatibility.
+
+Future research should add controlled repeated runs where a real source of stochasticity exists, validate entity extraction with an annotation protocol, complete a small justified graph matrix, and only then evaluate fixed-model/prompt/decoding answer generation and manually reviewed evidence faithfulness. Evaluate an established GraphRAG baseline after the retrieval pipeline and answer protocol are ready.
+
+## Installation and quick checks
+
+Use Python 3.13 or another version supported by the listed packages. The verified environment used Python 3.13.7 on CPU. The repository’s existing `.venv` is local and ignored; do not copy it between machines.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python -m spacy download en_core_web_sm
+python -m unittest discover -v
 ```
 
-## Run the pilot
+For exact extractor reproduction, install `en_core_web_sm` 3.8.0 compatible with spaCy 3.8.18. Phase B downloads the exact BGE revision on first use. This requires access to Hugging Face and sufficient local disk for the model and generated caches. See [docs/reproduction_guide.md](docs/reproduction_guide.md) for commands that write to fresh output directories.
 
-Run commands from the repository root. The `-m src...` form is intentional.
+## Repository map
 
-### 1. Load data
-
-```bash
-python -m src.load_data --split validation --limit 500 --seed 2027 --output-dir data/pilot_500
+```text
+data/                         Dataset instructions and provenance manifests
+docs/                         Methodology, design, reproduction, historical notes
+docs/research/                Consolidated Phase B review
+results/question_local_v1/    Stage A aggregate outputs and validation
+results/dense_graph_v1/       Phase B aggregate outputs, audits, validation
+results/pilot_50/             Historical 50-question graph experiments
+results/pilot_500/            Historical pooled 500-question experiments
+src/                          Experiment and validation modules
+tests/                        Unit tests
 ```
 
-This writes:
-- `data/pilot_500/passages.json` — deduplicated source passages.
-- `data/pilot_500/questions.json` — questions, answers, and gold supporting facts for evaluation.
-- `data/pilot_500/dataset_manifest.json` — sample/configuration metadata.
+The public release candidate keeps aggregate canonical findings while excluding raw per-question outputs and local research inputs. See [the release inventory](PUBLIC_RELEASE_INVENTORY.md) for the proposed scope. Reproduction commands require a locally obtained HotpotQA sample and the pinned BGE model; the included loader's seed does not guarantee the original sample if upstream data or library behavior has changed.
 
-The script uses a fixed seed and Hugging Face streaming mode to avoid intentionally downloading the entire dataset. Streaming availability depends on the upstream dataset repository and network access. Do not put dataset contents with incompatible redistribution terms into a public repository without checking the dataset license and terms.
+Do not interpret every file under `results/` as a final result. Canonical runs and preserved failed/superseded artifacts are labelled in [docs/experimental_design.md](docs/experimental_design.md) and the validation reports.
 
-### 2. Build the entity graph
+## Citation and contact
 
-```bash
-python -m src.build_graph \
-  --passages data/pilot_500/passages.json \
-  --graph-out data/pilot_500/entity_graph.graphml \
-  --entity-passages-out data/pilot_500/entity_passages.json \
-  --passage-entities-out data/pilot_500/passage_entities.json
+If you use the benchmark, cite HotpotQA:
+
+```bibtex
+@inproceedings{yang2018hotpotqa,
+  title     = {HotpotQA: A Dataset for Diverse, Explainable Multi-hop Question Answering},
+  author    = {Yang, Zhilin and Qi, Peng and Zhang, Saizheng and Bengio, Yoshua and Cohen, William W. and Salakhutdinov, Ruslan and Manning, Christopher D.},
+  booktitle = {Proceedings of EMNLP},
+  year      = {2018}
+}
 ```
 
-### 3. Cluster the original graph
-
-```bash
-python -m src.cluster_graph \
-  --graph data/pilot_500/entity_graph.graphml \
-  --output-dir results/pilot_500/partitions \
-  --methods leiden louvain \
-  --seed 42
-```
-
-### 4. Perturb and measure structural robustness
-
-```bash
-python -m src.perturb_graph \
-  --graph data/pilot_500/entity_graph.graphml \
-  --partition-dir results/pilot_500/partitions \
-  --output-dir results/pilot_500/structural \
-  --baseline-seed 42 \
-  --seeds 42 43 44 45 46 \
-  --removal-fraction 0.05
-```
-
-Outputs:
-- `results/pilot_500/structural/structural_robustness_raw.csv` — per-method, per-condition, per-seed measurements.
-- `results/pilot_500/structural/structural_robustness_summary.csv` — means and standard deviations across runs.
-- `results/pilot_500/structural/figures/structural_robustness.png` — ARI and LCC fraction plots.
-
-### 5. Run the TF-IDF retrieval pilot
-
-```bash
-python -m src.evaluate_perturbed_retrieval \
-  --questions data/pilot_500/questions.json \
-  --passages data/pilot_500/passages.json \
-  --graph data/pilot_500/entity_graph.graphml \
-  --entity-passages data/pilot_500/entity_passages.json \
-  --passage-entities data/pilot_500/passage_entities.json \
-  --output-dir results/pilot_500/perturbed_retrieval \
-  --seeds 42 43 44 45 46 47 48 49 50 51 \
-  --removal-fraction 0.05 \
-  --seed-k 2 \
-  --k-values 5 10
-```
-
-This repeats the existing TF-IDF-seeded candidate-filtering experiment on 500 questions. It does not yet add dense retrieval or answer generation. For interpretation and limitations, see `docs/next_experiment_protocol.md`.
-
-## Measurements
-
-- **Community count:** number of detected communities.
-- **ARI:** adjusted Rand index between the original and perturbed community assignments for the *same node set*. ARI is a partition-similarity metric, not a retrieval metric.
-- **LCC fraction:** largest connected component size divided by the original graph's node count.
-- **Connected-community fraction:** among non-singleton communities, the fraction whose induced subgraph is connected. NaN means there were no non-singleton communities to score.
-- **Edge-removal fraction:** actual fraction of original edges removed.
-
-Random removal uses a different edge sample for each seed. Highest-betweenness removal selects the top-ranked edges from the original graph. If edge betweenness ties at the cutoff, seeded tie-breaking may vary the removed set; otherwise the removed set can be identical across seeds. Repeated runs also vary the clustering algorithm seed.
-
-## Methodological cautions
-
-1. The first sample is small and is not a representative benchmark by itself.
-2. The graph is built using off-the-shelf named-entity recognition and sentence-level co-occurrence; it does not encode typed semantic relations.
-3. The HotpotQA gold labels are stored separately and are not used for graph construction. Source passages naturally include the evidence being evaluated; labels must not be used to tune graph construction.
-4. The current prototype also contains a TF-IDF-seeded graph candidate-filtering retrieval pilot with supporting-passage Recall@k. It does **not** yet establish a statistically reliable advantage, compare dense retrievers, or evaluate generated-answer accuracy/faithfulness.
-5. The k-core approach is a hierarchy, not directly interchangeable with a standard flat community-detection algorithm. Add it only with a clearly documented retrieval and comparison rule.
-6. Check related work before making novelty claims. The project is an exploratory pilot, not an established novel method.
-
-## Run small unit tests
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-These tests cover structural helper functions, Jaccard/partition comparisons, and controlled passage-graph construction on synthetic graphs; they do not validate the full HotpotQA-to-GraphRAG pipeline.
-
-## Repository policy
-
-Do not commit `.venv/`, model files, cache directories, or large raw dataset dumps. A reproducible manifest and instructions are preferable. Only publish data/results that you are permitted to redistribute.
-
-
-## Current experiment status (audited 9 November 2026)
-
-- `data/processed/` and the top-level `results/` pilot outputs contain the earlier 15-question sample.
-- `data/pilot_50/` and `results/pilot_50/perturbed_retrieval/` contain the later 50-question sample and its raw retrieval/structural runs. Use explicit file paths when evaluating the 50-question run.
-- The 50-question sample is all `hard` (37 bridge, 13 comparison), so it is not a representative validation sample. For the next 500-question run, the existing loader's shuffle-buffer formula yields a buffer of 10,000, larger than the 7,405-example validation split. Save to `data/pilot_500/` and use a new seed.
-- The saved retrieval pilot uses TF-IDF for initial seed selection and final candidate reranking; it is not a dense-retriever or full GraphRAG comparison.
-- Pilot-50 audit and cross-seed analyses are reproducible with `python -m src.analyze_pilot50` and `python -m src.evaluate_seed_stability`. A same-sentence vs same-passage graph-construction ablation is implemented in `python -m src.evaluate_graph_construction_variants`. See [`docs/pilot50_reproducibility_audit.md`](docs/pilot50_reproducibility_audit.md) and [`docs/next_experiment_protocol.md`](docs/next_experiment_protocol.md).
-- The uploaded macOS `.venv` is intentionally not included in clean source bundles. Recreate a local environment from `requirements.txt`; do not copy a virtual environment between machines.
-
-
-## Cross-seed stability analysis
-
-To compare partitions on the same unchanged graph across multiple algorithm seeds and measure retrieved-passage set overlap, run:
-
-```bash
-python -m src.evaluate_seed_stability \
-  --questions data/pilot_500/questions.json \
-  --passages data/pilot_500/passages.json \
-  --graph data/pilot_500/entity_graph.graphml \
-  --entity-passages data/pilot_500/entity_passages.json \
-  --passage-entities data/pilot_500/passage_entities.json \
-  --methods leiden louvain \
-  --seeds 42 43 44 45 46 47 48 49 50 51 \
-  --output-dir results/pilot_500/seed_stability
-```
-
-This requires `python-igraph` and `leidenalg` for Leiden. The script saves every partition, pairwise ARI/NMI, per-question retrieval-set Jaccard, question-level bootstrap confidence intervals, and summary CSVs. The 50-question audit bundle includes a completed 10-seed Louvain run; the matching Leiden run still requires `python-igraph` and `leidenalg` in the local environment.
-
-To compare same-sentence with same-passage entity co-occurrence on the existing 50-question pilot while preserving the exact entity node set, run:
-
-```bash
-python -m src.evaluate_graph_construction_variants \
-  --dataset-dir data/pilot_50 \
-  --seeds 42 43 44 45 46 47 48 49 50 51 \
-  --output-dir results/pilot_50/graph_construction_variants
-```
-
-For a future 500-question sample, change both paths to `data/pilot_500` and `results/pilot_500/graph_construction_variants`. This ablation evaluates TF-IDF-seeded candidate filtering only, not dense retrieval or generated answers. See [`docs/literature_review_matrix.md`](docs/literature_review_matrix.md) for the focused related-work assessment and [`docs/next_local_run.md`](docs/next_local_run.md) for the next Mac run commands.
+For this research code, cite the repository and its release commit after a public repository and citation metadata have been established. No public GitHub remote or contact email is configured in this checkout; use the repository’s Issues page after publication for project questions.

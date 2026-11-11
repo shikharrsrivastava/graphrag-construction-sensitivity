@@ -1,5 +1,7 @@
 # Research Brief — Outline
 
+> **Pre-experiment outline:** this was drafted before Stage A and Phase B. Its descriptions of implemented and planned work are historical. See the root README and [`research/PHASE_B_REVIEW_SUMMARY.md`](research/PHASE_B_REVIEW_SUMMARY.md) for current completed results and remaining requirements.
+
 ## Working title
 Does More Stable Clustering Improve GraphRAG Answers?
 

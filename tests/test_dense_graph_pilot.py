@@ -5,6 +5,8 @@ import networkx as nx
 import numpy as np
 
 from src.evaluate_dense_graph import (
+    MODEL_ID,
+    MODEL_REVISION,
     bootstrap_mean_ci,
     build_chunk_similarity_graph,
     build_entity_graph_local,
@@ -26,6 +28,10 @@ class DenseGraphPilotTests(unittest.TestCase):
             "p2": {"sentences": [["alice", "bob", "carol"]], "entities": ["alice", "bob", "carol"]},
             "foreign": {"sentences": [["outsider", "secret"]], "entities": ["outsider", "secret"]},
         }
+
+    def test_dense_model_revision_is_pinned_to_validated_run(self):
+        self.assertEqual(MODEL_ID, "BAAI/bge-small-en-v1.5")
+        self.assertEqual(MODEL_REVISION, "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a")
 
     def test_stratified_pilot_selection_is_reproducible_and_primary_only(self):
         qs = []

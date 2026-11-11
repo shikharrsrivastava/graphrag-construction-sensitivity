@@ -1,5 +1,7 @@
 # Phase B validation report
 
+**Public release scope:** This report retains aggregate findings and validation evidence. Raw per-question records, local HotpotQA inputs, graph partitions, and extraction/embedding caches used in the original independent recomputation are excluded from the aggregate-only release candidate and remain in the maintainer's local research workspace. A fresh audit requires obtaining the data and regenerating matching artifacts as described in the reproduction guide.
+
 **Date:** 2026-11-11
 **Dataset:** `data/pilot_500_v2`
 **Validated scopes:** 50-question feasibility pilot and 498-question primary evaluation

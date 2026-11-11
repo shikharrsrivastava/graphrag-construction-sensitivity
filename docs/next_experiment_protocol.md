@@ -1,6 +1,9 @@
 # Next Experiment Protocol — Graph Construction Sensitivity and Multi-Hop QA
 
-**Status:** proposed protocol for discussion and implementation. Not yet executed.  
+> **Historical planning document:** written before Stage A and Phase B were run. Phase B’s completed design and results are documented in [`experimental_design.md`](experimental_design.md) and [`research/PHASE_B_REVIEW_SUMMARY.md`](research/PHASE_B_REVIEW_SUMMARY.md). Items below marked proposed/planned should not be read as current execution status.
+
+**Status:** proposed protocol for discussion and implementation. Not yet executed.
+
 **Design principle:** preserve the original 50-question pilot; create every expanded dataset, graph, index, and result under a new versioned directory.
 
 ## 1. Candidate research question

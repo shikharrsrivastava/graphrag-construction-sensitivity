@@ -5,6 +5,8 @@
 **Evaluation scope:** 50-question feasibility pilot and 498-question primary evaluation
 **Purpose:** Independent researcher review of the executed Phase B dense retrieval and question-local graph experiment.
 
+**Public release scope:** This research review describes the complete local audit performed with raw question-level outputs and caches. The code-first release candidate keeps aggregate findings and audit summaries but excludes those raw files and HotpotQA inputs. The file inventory in Section 13 records the research workspace as it existed when this report was prepared, not the reduced public release inventory; see `PUBLIC_RELEASE_INVENTORY.md`.
+
 ## 1. Scope and interpretation
 
 Phase B compares seven retrieval configurations on the same primary set of 498 HotpotQA questions, each with ten allowed context passages. The two exceptional two-context questions are excluded, consistent with the separate variable-context analysis in Stage A. Each method has one saved row per question (3,486 rows total). Questions are the inferential unit. The dataset contains 404 bridge and 94 comparison questions, all from the existing hard sample; claims should not be generalized beyond this sample without additional sampling.
@@ -284,12 +286,4 @@ Source and tests relevant to review are `src/evaluate_dense_graph.py`, `src/phas
 
 ## 14. Git checkpoint and working tree
 
-At final verification, `HEAD` was **`a37a1811c7484d481d60a0c8b606af1362def5d6`** on branch `main`. The exact `git status --short --branch` output after creating this report is:
-
-```text
-## main
-?? PHASE_B_REVIEW_SUMMARY.md
-?? stage_a_review_bundle.zip
-```
-
-The only untracked paths are this new review summary and the pre-existing Stage A review bundle. This request did not ask for a commit; the hash refers to the existing HEAD, so it does not include this document.
+At the time of this report's initial preparation, the local checkout had a different temporary checkpoint. The report was subsequently retained on current `main` after that checkpoint was replaced; that earlier commit is now unreachable locally and included the Phase B review ZIP. Current `main` history does not include the ZIP. The current staged release candidate's Git state is documented separately by `PUBLIC_RELEASE_INVENTORY.md` and the live working-tree status; this report's original checkpoint/status are not current release metadata.

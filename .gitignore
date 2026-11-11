@@ -6,6 +6,9 @@ env/
 # Python cache
 __pycache__/
 *.py[cod]
+.coverage
+.tox/
+.nox/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
@@ -33,6 +36,39 @@ checkpoints/
 
 # Local caches
 .cache/
+.huggingface/
+hf_cache/
+huggingface_cache/
+
+# Keep new reproduction runs separate from retained research artifacts
+/results/reproduction/
+
+# Public release candidate: keep local benchmark inputs and derived artifacts
+# on disk, but omit them from the proposed Git index pending rights review.
+/data/**/questions.json
+/data/**/passages.json
+/data/**/question_contexts.json
+/data/**/*.graphml
+/data/**/entity_passages.json
+/data/**/passage_entities.json
+
+# Raw/question-level and superseded experiment artifacts are local-only.
+/logs/
+/results/dense_graph_v1/cache/
+/results/dense_graph_v1/pilot50/
+/results/dense_graph_v1/pilot50_verified/
+/results/**/failure.json
+/results/**/*.jsonl
+/results/**/*_raw.csv
+/results/**/question_level_metrics.csv
+/results/**/retrieval_quality_question_level.csv
+/results/**/retrieval_jaccard_question_level.csv
+/results/**/retrieval_question_level.csv
+/results/**/*pairwise.csv
+/results/**/selected_questions.json
+/results/**/partitions/
+/results/**/same_passage/
+/results/**/same_sentence/
 
 # Local review bundles (canonical contents are maintained separately)
 /phase_b_review_bundle.zip

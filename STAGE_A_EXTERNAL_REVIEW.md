@@ -4,6 +4,8 @@
 **Repository checkpoint:** `9f13cbef6a952e776d4aa4a3299239fde821b4cd`
 **Inputs reviewed:** `data/pilot_500_v2`, `src/evaluate_question_local.py`, `tests/test_question_local.py`, and all files in `results/question_local_v1/`.
 
+**Public release scope:** This independent review used local raw inputs and per-question JSONL outputs. The current aggregate-only release candidate excludes those files; they remain on the research machine and can be regenerated after independently obtaining the dataset as described in `data/README.md`.
+
 This report independently derives counts and retrieval metrics from the saved per-question JSONL files, checks candidate generation against the saved global graph and mappings, and compares independently generated summaries and paired tests to the saved CSVs. It does not treat older pooled-corpus results as findings for this run. No experiment output or evaluator source was changed for this review.
 
 ## Dataset counts and evaluated rows

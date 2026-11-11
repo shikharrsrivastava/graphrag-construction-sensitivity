@@ -1,5 +1,7 @@
 # Next Local Run — 500-question sample and Leiden validation
 
+> **Historical handoff:** this file predates the validated Stage A and Phase B work. Its 500-question sampling/Leiden steps were superseded; do not treat them as the current next run. Use [`reproduction_guide.md`](reproduction_guide.md) for non-destructive reproduction of the canonical studies and [`research/PHASE_B_REVIEW_SUMMARY.md`](research/PHASE_B_REVIEW_SUMMARY.md) for current status.
+
 This file is the next practical handoff. The cleaned project archive intentionally excludes the machine-specific `.venv` from the uploaded ZIP. Run these commands on the Mac where the original project environment and model downloads are available.
 
 ## 1. Set up the environment

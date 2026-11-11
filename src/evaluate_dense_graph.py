@@ -30,13 +30,13 @@ import torch
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
-from huggingface_hub.constants import HF_HUB_CACHE
 
 from src.build_graph import ENTITY_LABELS, normalize_entity
 from src.common import ROOT, read_json
 from src.evaluate_question_local import passage_text, rank_local, validate_inputs
 
 MODEL_ID = "BAAI/bge-small-en-v1.5"
+MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 K_VALUES = (2, 5, 10)
 BOOTSTRAP_REPLICATES = 10000
@@ -467,19 +467,6 @@ def max_rss_mb() -> float:
     return rss / (1024 * 1024) if platform.system() == "Darwin" else rss / 1024
 
 
-def cached_model_snapshot() -> tuple[Path | None, str | None]:
-    """Return an installed BGE snapshot and Hub commit without making network calls."""
-    repo_dir = Path(HF_HUB_CACHE) / "models--BAAI--bge-small-en-v1.5"
-    ref = repo_dir / "refs" / "main"
-    if not ref.exists():
-        return None, None
-    revision = ref.read_text(encoding="utf-8").strip()
-    snapshot = repo_dir / "snapshots" / revision
-    if revision and snapshot.is_dir() and (snapshot / "config.json").exists():
-        return snapshot, revision
-    return None, None
-
-
 def resolve_model_revision(model: SentenceTransformer, fallback: str | None = None) -> str:
     try:
         revision = model._first_module().auto_model.config._commit_hash
@@ -689,12 +676,10 @@ def run_scope(data_dir: Path, output_root: Path, scope: str = "pilot50", sample_
     torch.set_num_threads(2)
     device = "cpu"  # MPS and CUDA were unavailable during environment inspection.
     load_start = time.perf_counter()
-    snapshot_path, snapshot_revision = cached_model_snapshot()
-    model_source = str(snapshot_path) if snapshot_path else MODEL_ID
-    model = SentenceTransformer(model_source, device=device)
+    model = SentenceTransformer(MODEL_ID, revision=MODEL_REVISION, device=device)
     model.max_seq_length = 512
     model_load_seconds = time.perf_counter() - load_start
-    model_revision = resolve_model_revision(model, snapshot_revision)
+    model_revision = resolve_model_revision(model, MODEL_REVISION)
     model_cache_dir = cache_dir / "embeddings" / model_revision
     texts = {pid: context_text(passage_by_id[pid]) for pid in selected_context_ids}
     passage_embeddings, passage_cache_info = encode_cached(model, texts, model_cache_dir / "passages.npz", model_revision, batch_size)

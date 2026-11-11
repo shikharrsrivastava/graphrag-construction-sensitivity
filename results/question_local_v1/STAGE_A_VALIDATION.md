@@ -4,6 +4,8 @@
 **Dataset:** `data/pilot_500_v2`
 **Status:** Evaluation executed; output integrity checks passed; full test suite passed.
 
+**Public release scope:** This validation used local HotpotQA inputs and per-question outputs. The aggregate-only release candidate excludes raw dataset files and question-level JSONL records; see `data/README.md` and `PUBLIC_RELEASE_INVENTORY.md` for acquisition, preparation, and release scope.
+
 ## Scope and implementation findings
 
 Stage A evaluates TF-IDF evidence retrieval on the fixed 500-question v2 sample. There are 498 questions with ten contexts and two questions with two contexts. The ten-context questions are the primary analysis. The two exceptions are retained and reported separately; no passages were added.
@@ -102,7 +104,7 @@ Final full test suite:
 python -m unittest discover -v
 ```
 
-Outcome: **15 tests passed**, 0.008 seconds reported by unittest; 17.2 seconds process wall time including Matplotlib font-cache initialization. Matplotlib emitted a non-fatal warning that `[USER_HOME]/.matplotlib` is not writable and used a temporary cache.
+Outcome: **15 tests passed**, 0.008 seconds reported by unittest; 17.2 seconds process wall time including Matplotlib font-cache initialization. Matplotlib emitted a non-fatal warning that the local cache directory was not writable and used a temporary cache.
 
 Independent artifact audit: all output counts, context memberships, gold denominators, per-question recall/completeness, reconstructed Track B candidate metrics, all 28 summary rows, and all 12 paired comparisons passed. `git diff --check` passed before creation of this report.
 

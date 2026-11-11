@@ -4,6 +4,8 @@
 **Project:** GraphRAG Robustness and Sensitivity Analysis
 **Status:** historical graph/community experiments, Stage A lexical evaluation, and Phase B dense/local-graph retrieval are documented. Answer generation, faithfulness, and external GraphRAG comparisons remain unexecuted. This is an interim empirical report, not a completed GraphRAG research study or a novelty claim.
 
+**Public release scope:** This report describes experiments run with local HotpotQA files, raw per-question outputs, and caches. The code-first aggregate-only release candidate excludes those inputs/artifacts while retaining aggregate findings, configurations, audit summaries, and reports. See `PUBLIC_RELEASE_INVENTORY.md`; a fresh checkout does not contain all inputs needed to rerun the saved experiments.
+
 ## Executive summary
 
 The project asks whether changes to graph construction and community structure affect retrieval of supporting evidence for multi-hop questions and, ultimately, answer reliability. The initial historical experiments built a pooled named-entity co-occurrence graph, measured Leiden/Louvain community behavior, and evaluated TF-IDF-seeded graph candidates. Those experiments rank against the full pooled passage corpus and are not question-local distractor evaluation.
@@ -122,9 +124,9 @@ The pilot and full-set findings are directionally consistent: BGE outperformed T
 
 ## Reproducibility and source files
 
-- Phase B run tables, raw question records, pinned embedding cache, and extraction cache: `results/dense_graph_v1/`.
+- Phase B aggregate run tables and validation reports: `results/dense_graph_v1/`; raw question records and pinned embedding/extraction caches remain local-only and are excluded from the public release candidate.
 - Independent Phase B recomputation: `src/phase_b_independent_audit.py`; audits at `results/dense_graph_v1/phase_b_validation_audits/`.
 - Phase B evaluator and tests: `src/evaluate_dense_graph.py`, `tests/test_dense_graph_pilot.py`.
 - Stage A evaluator and validation: `src/evaluate_question_local.py`, `results/question_local_v1/`.
 - Historical graph and clustering implementation: `src/build_graph.py`, `src/cluster_graph.py`, and the saved results beneath `results/pilot_500/` and `results/pilot_50/`.
-- Environment, commands, failures, and runtimes: `logs/progress.md`.
+- Historical environment, commands, failures, and runtimes were recorded in local `logs/progress.md`; that workstation-specific log is excluded from the public release candidate.
