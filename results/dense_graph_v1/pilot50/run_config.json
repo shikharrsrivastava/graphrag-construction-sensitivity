@@ -1,0 +1,104 @@
+{
+  "stage": "Phase B dense retrieval / local graph construction",
+  "scope": "pilot50",
+  "dataset": "data/pilot_500_v2",
+  "question_count": 50,
+  "question_type_counts": {
+    "bridge": 41,
+    "comparison": 9
+  },
+  "context_count_per_question": 10,
+  "sample_seed": 2027,
+  "selection": "stratified random by question type from 498 ten-context questions",
+  "configs": [
+    "vanilla_tfidf",
+    "vanilla_bge",
+    "entity_sentence_frequency_weighted",
+    "entity_passage_frequency_weighted",
+    "entity_sentence_binary",
+    "entity_sentence_top50_sparsified",
+    "chunk_bge_knn2"
+  ],
+  "seed_k": 5,
+  "entity_neighbor_k": 3,
+  "chunk_knn_k": 2,
+  "sparsification": {
+    "method": "retain strongest ceiling(50% of sentence-frequency edges)",
+    "tie_break": "descending weight then lexical endpoint IDs",
+    "edges_retained": "see per-question original/removed graph edge counts"
+  },
+  "entity_extraction": {
+    "model": "en_core_web_sm",
+    "model_version": "3.8.0",
+    "requested_unique_passages": 500,
+    "cache_hits": 500,
+    "newly_extracted": 0,
+    "new_extraction_seconds": 0.0,
+    "cache_load_and_prepare_seconds": 0.22358016699945438,
+    "existing_mapping_used_for_graphs": false,
+    "existing_mapping_crosscheck_exact": "498/498",
+    "existing_mapping_provenance": "mapping manifest does not record extractor/model revision; fresh passage-local sentence extraction is used for all graph construction"
+  },
+  "dense_model": {
+    "model_id": "BAAI/bge-small-en-v1.5",
+    "resolved_revision": "unknown",
+    "device": "cpu",
+    "max_seq_length": 512,
+    "embedding_dimension": 384,
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "passages_prefixed": false,
+    "normalized_embeddings": true,
+    "passage_cache": {
+      "new_embedding_count": 500,
+      "cache_hit_count": 0,
+      "embedding_compute_seconds": 9.352048249998916,
+      "cache_path": "results/dense_graph_v1/cache/embeddings/unknown/passages.npz"
+    },
+    "query_cache": {
+      "new_query_count": 50,
+      "cache_hit_count": 0,
+      "query_compute_seconds": 0.16404512499866541
+    },
+    "model_load_seconds": 27.970977249999123
+  },
+  "global_model_data_sharing": "passage embeddings are independently encoded from text; each graph, seed set, candidate pool, and ranking is built per question from its ten contexts",
+  "statistics": {
+    "bootstrap_unit": "question",
+    "bootstrap_replicates": 10000,
+    "confidence_interval": "percentile 2.5/97.5 percentiles of bootstrap means",
+    "paired_test": "two-sided paired sign-flip Monte Carlo randomization, plus-one correction",
+    "permutations": 20000,
+    "holm_family": "all prespecified pilot method/outcome contrasts in paired_comparisons.csv"
+  },
+  "runtime_semantics": "one-time extraction, model load, passage/query encoding and total scope runtime are in efficiency.csv; per-question graph construction, query scoring, candidate generation, reranking and total query retrieval times are in raw rows; total_query_runtime_seconds excludes passage/query embedding and graph build",
+  "resource": {
+    "torch": "2.15.0",
+    "cuda_available": false,
+    "mps_available": true,
+    "python": "3.13.7",
+    "numpy": "2.5.4",
+    "scikit_learn": "1.9.1",
+    "networkx": "3.7",
+    "spacy": "3.8.18",
+    "spacy_model": "en_core_web_sm",
+    "spacy_model_version": "3.8.0",
+    "torch_threads": 2,
+    "process_peak_rss_mb": 1040.171875
+  },
+  "validation": {
+    "question_count": 50,
+    "config_count": 7,
+    "row_count": 350,
+    "expected_row_count": 350,
+    "context_violation_count": 0,
+    "graph_scope_violation_count": 0,
+    "candidate_scope_violation_count": 0,
+    "every_graph_serialized": true,
+    "all_question_contexts_ten": true,
+    "gold_supports_present": true,
+    "cross_question_entity_or_chunk_node_leakage_count": 0,
+    "entity_graph_node_scope_checked": true,
+    "chunk_graph_node_scope_checked": true
+  },
+  "total_scope_runtime_seconds": 39.017417625000235
+}

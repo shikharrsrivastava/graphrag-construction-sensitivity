@@ -1,0 +1,31 @@
+{
+  "raw_rows": 3486,
+  "unique_questions": 498,
+  "rows_per_configuration": {
+    "vanilla_tfidf": 498,
+    "vanilla_bge": 498,
+    "entity_sentence_frequency_weighted": 498,
+    "entity_passage_frequency_weighted": 498,
+    "entity_sentence_binary": 498,
+    "entity_sentence_top50_sparsified": 498,
+    "chunk_bge_knn2": 498
+  },
+  "context_candidate_violations": 0,
+  "context_rank_violations": 0,
+  "graph_node_scope_violations": 0,
+  "graph_edge_reconstruction_mismatches": 0,
+  "ranking_reconstruction_mismatches": 0,
+  "metric_reconstruction_mismatches": 0,
+  "gold_denominator_mismatches": 0,
+  "graph_structure_stat_mismatches": 0,
+  "retrieval_summary_csv_matches_raw": true,
+  "graph_summary_csv_matches_raw": true,
+  "paired_comparisons_csv_matches_raw": true,
+  "stability_pairwise_csv_matches_raw": true,
+  "stability_summary_csv_matches_raw": true,
+  "selected_question_count": 498,
+  "expected_rows": 3486,
+  "model_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+  "failures": [],
+  "passed": true
+}

@@ -1,0 +1,15 @@
+{
+  "question_count": 498,
+  "config_count": 7,
+  "row_count": 3486,
+  "expected_row_count": 3486,
+  "context_violation_count": 0,
+  "graph_scope_violation_count": 0,
+  "candidate_scope_violation_count": 0,
+  "cross_question_entity_or_chunk_node_leakage_count": 0,
+  "every_graph_serialized": true,
+  "all_question_contexts_ten": true,
+  "gold_supports_present": true,
+  "entity_graph_node_scope_checked": true,
+  "chunk_graph_node_scope_checked": true
+}

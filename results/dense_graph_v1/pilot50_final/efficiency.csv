@@ -1,0 +1,6 @@
+stage,seconds,items,peak_process_rss_mb
+spacy_extraction_new_passages,0.0,0,672.890625
+bge_model_load,0.12279875000058382,1,672.890625
+bge_passage_embedding_compute_or_cache,2.920005499618128e-07,500,672.890625
+bge_query_embedding_compute_or_cache,3.330005711177364e-07,50,672.890625
+total_scope_run_after_input_load,1.521263958000418,350,672.890625
