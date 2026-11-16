@@ -73,3 +73,5 @@ huggingface_cache/
 # Local review bundles (canonical contents are maintained separately)
 /phase_b_review_bundle.zip
 /stage_a_review_bundle.zip
+/results/graph_ranking_v1/cache/
+/results/graph_ranking_v1/**/question_results.partial.jsonl

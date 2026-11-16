@@ -73,4 +73,4 @@ Answer generation, EM/F1, faithfulness, LightRAG/MS GraphRAG, Contriever, 2WikiM
 
 ## Amendments
 
-None.
+1. **2026-11-16, before the evaluator was run on any question.** I specified "normalized title" as follows: remove a single trailing parenthetical disambiguator (for example `Green (album)` becomes `green`), then apply `normalize_entity`. Without this, Wikipedia-style titles could never match a plain mention. No result had been computed when this was fixed.
