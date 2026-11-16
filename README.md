@@ -1,6 +1,6 @@
 # Graph Construction Sensitivity and Evidence Retrieval
 
-An empirical research repository studying how graph construction choices affect evidence retrieval for multi-hop question answering. The repository contains historical pooled-corpus experiments, a validated question-local TF-IDF baseline (Stage A), and an independently audited BGE and question-local graph comparison (Phase B).
+An empirical research repository studying how graph construction choices affect evidence retrieval for multi-hop question answering. The repository contains historical pooled-corpus experiments, a validated question-local TF-IDF baseline (Stage A), an independently audited BGE and question-local graph comparison (Phase B), and a pre-registered study of graph-aware ranking on HotpotQA and MuSiQue, with controls (Phase C).
 
 > **Research status:** Retrieval experiments are complete for the saved 498-question HotpotQA sample (Stages A–B) and for the Phase C graph-aware ranking study on HotpotQA and two disjoint 500-question MuSiQue samples ([results](RESULTS_graph_ranking.md)). Generated answers, answer accuracy, faithfulness, and an established GraphRAG system have not been evaluated. This is not a completed GraphRAG architecture and does not establish broad generalization beyond the sampled questions.
 
@@ -20,7 +20,7 @@ Objectives:
 
 ## Experimental architecture
 
-The repository has three distinct experiment families:
+The repository has four distinct experiment families:
 
 | Family | Data and graph scope | Purpose | Status |
 |---|---|---|---|
@@ -36,6 +36,8 @@ Graphs and indexes in the primary Phase B question-local track are created from 
 The experiments use HotpotQA `distractor` validation. The public repository does not redistribute raw questions, benchmark passages, context mappings, or dataset-derived graphs; see [data preparation and licensing](data/README.md). The canonical local dataset had 500 questions, 4,947 deduplicated passages, 498 questions with ten contexts, and two with two contexts. All 500 had gold support in their supplied contexts. The primary 498 are all `hard` (404 bridge, 94 comparison); conclusions are limited to this fixed sample.
 
 Raw question-level retrieval records are also not redistributed. The published aggregates can be inspected, but complete metric recomputation requires independently obtaining and preparing HotpotQA as described in `data/README.md`, then rerunning the documented evaluation. The public checkout alone is not sufficient to recompute every reported metric from raw question-level records.
+
+Phase C also uses MuSiQue (answerable v1.0 dev, from `bdsaglam/musique` at the pinned revision recorded in `data/musique_500/dataset_manifest.json`): two disjoint 500-question samples (seeds 2027 and 2028) drawn from questions with exactly 20 paragraphs, 2–4 hops. MuSiQue is released under CC BY 4.0 and its paragraphs are Wikipedia-derived; raw MuSiQue questions and passages are not redistributed here either, and `python -m src.load_musique` regenerates them (the second sample uses `--seed 2028 --exclude-questions-from data/musique_500/questions.json`).
 
 The upstream HotpotQA dataset card identifies the dataset as CC BY-SA 4.0. Review the dataset and source-content terms before distributing data or derived caches. The code repository itself currently has **no project-level `LICENSE`**; no license has been selected for original code. Model weights are not included; Phase B fetches the pinned BGE model snapshot when needed.
 
@@ -91,7 +93,7 @@ python -m src.evaluate_graph_ranking --data-dir data/musique_500 --output-dir re
 
 Question is the independent unit. Stage A and Phase B use 10,000 question bootstrap replicates and percentile 95% intervals. Phase B paired differences use a two-sided sign-flip Monte Carlo test (20,000 draws, plus-one p correction) and Holm correction across 69 pre-specified method/outcome comparisons. Stage A reports paired comparisons separately by context stratum.
 
-The independent Phase B audit was run against local raw per-question records and caches, reconstructing question-local graphs, candidates, rankings, metrics, structural statistics, and inference. It found zero out-of-context candidates/rankings, graph-scope violations, or metric/denominator mismatches in either run. Aggregate audit reports are included; the raw inputs used to recompute them are excluded from this release candidate. The full suite contains 41 tests (25 from Stages A–B plus 16 Phase C tests for context scoping, PPR, metrics, paired statistics and the MuSiQue loader), including a guard for the pinned model revision.
+The independent Phase B audit was run against local raw per-question records and caches, reconstructing question-local graphs, candidates, rankings, metrics, structural statistics, and inference. It found zero out-of-context candidates/rankings, graph-scope violations, or metric/denominator mismatches in either run. Aggregate audit reports are included; the raw inputs used to recompute them are excluded from this release candidate. The full suite contains 45 tests (25 from Stages A–B, 16 Phase C tests for context scoping, PPR, metrics, paired statistics and the MuSiQue loader, and 4 for the Phase C-2 controls), including a guard for the pinned model revision.
 
 ## Limitations and future work
 
@@ -99,7 +101,7 @@ The independent Phase B audit was run against local raw per-question records and
 - The Stage A shared-global-graph comparison shares graph and TF-IDF corpus statistics across questions; it is not a local graph condition.
 - Phases B and C use one dense model (BGE-small) and deterministic configurations. It does not measure same-configuration repeated-seed stability.
 - spaCy entity quality has not been measured against human labels; agreement with a legacy automatic mapping is not a gold evaluation.
-- Passage-level binary weighting, alternate sparsification controls, sentence-node graphs, entity-semantic graphs, entity-passage bipartite graphs, alias-resolution ablations, local community retrieval, and validated typed relations remain untested.
+- Passage-level binary weighting, alternate sparsification controls, sentence-node graphs, entity-semantic graphs, alias-resolution ablations, bipartite-graph variants other than Phase C's passage–entity graph, local community retrieval, and validated typed relations remain untested.
 - No answer generation, Exact Match, token F1, evidence faithfulness, or manual faithfulness review has been performed.
 - LightRAG/Microsoft GraphRAG, Contriever and 2WikiMultiHopQA have not been run.
 - The project has no selected code license or published maintainer email. The published Git history has been sanitized; local review bundles are not included in the repository. Dataset and model terms remain separate from any future project code license.
@@ -115,7 +117,7 @@ Use Python 3.13 or another version supported by the listed packages. The verifie
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt   # includes rank-bm25 and datasets, used by Phase C
 python -m spacy download en_core_web_sm
 python -m unittest discover -v
 ```
