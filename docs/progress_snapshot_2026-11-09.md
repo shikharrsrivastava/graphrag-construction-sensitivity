@@ -1,3 +1,5 @@
+> **Historical snapshot, superseded.** This file records the state on 9 November 2026. Its guidance about not yet emailing Prof. De Meo no longer applies: Phase C (graph-aware ranking on HotpotQA and MuSiQue, with pre-registered controls) has since been completed. See `RESULTS_graph_ranking.md` for the current results.
+
 # Research Progress Snapshot — 9 November 2026
 
 ## Main objective
