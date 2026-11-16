@@ -67,9 +67,9 @@ def run_dataset(name, results_root, out_root, cache_dir, model):
         scores = {pid: float(s) for pid, s in zip(contexts, m @ query_emb[str(q["question_id"])])}
         for s in rank_contexts(contexts, scores)[:SEED_K]:
             hop_questions.append({"question_id": f"{q['question_id']}::hop2::{s}", "question": hop2_query(str(q["question"]), passage_by_id[s])})
-    hop2_emb, info = encode_queries_cached(model, hop_questions, emb_dir / "hop2_queries.npz", revision)
-    if info["new_query_count"]:
-        raise RuntimeError(f"{name}: expected all second-hop embeddings cached, found {info['new_query_count']} missing")
+    # One cache file per dataset: the Phase C-2 run shared a single file, so each dataset overwrote the previous one.
+    hop2_emb, info = encode_queries_cached(model, hop_questions, emb_dir / f"hop2_queries_{name}.npz", revision)
+    print(f"{name}: second-hop queries encoded={info['new_query_count']} cached={info['cache_hit_count']}", flush=True)
     rows, bad = [], []
     for q in questions:
         row, bge_rank = evaluate_question(q, passage_emb, query_emb[str(q["question_id"])], hop2_emb)
@@ -84,7 +84,7 @@ def run_dataset(name, results_root, out_root, cache_dir, model):
         for r in rows:
             handle.write(json.dumps(r, ensure_ascii=False) + "\n")
     (out_dir / "validation_checks.json").write_text(json.dumps({"question_count": len(questions), "rows": len(rows),
-        "bge_ranking_recomputation_mismatches": 0, "second_hop_embeddings_all_cached": True}, indent=2) + "\n")
+        "bge_ranking_recomputation_mismatches": 0, "second_hop_queries_encoded": info["new_query_count"], "second_hop_queries_cached": info["cache_hit_count"]}, indent=2) + "\n")
     return rows + [r for r in stored if r["config"] in {"vanilla_bge", "ppr_entity_loo"}]
 
 

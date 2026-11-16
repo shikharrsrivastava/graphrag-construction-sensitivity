@@ -27,4 +27,4 @@ Other non-graph second-hop methods (a trained reranker, multi-query fusion, tuni
 
 ## Amendments
 
-None.
+1. **2026-11-16, before any dense-only score was computed.** The first attempt stopped with a guard error: the C-2 run wrote all three datasets' second-hop embeddings to one cache file, so each dataset overwrote the previous one and only the last dataset's embeddings survived. "Reuses all caches, including the second-hop query embeddings" above was therefore partly wrong. The missing second-hop queries are re-encoded from the identical inputs (same text, model revision and prefix) into one cache file per dataset. The C-2 results are unaffected, since they used the in-memory embeddings. The failed attempt's `failure.json` is kept as `failure_attempt1.json`. No design element changes.
