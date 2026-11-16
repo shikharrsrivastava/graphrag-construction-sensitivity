@@ -39,7 +39,7 @@ Raw question-level retrieval records are also not redistributed. The published a
 
 Phase C also uses MuSiQue (answerable v1.0 dev, from `bdsaglam/musique` at the pinned revision recorded in `data/musique_500/dataset_manifest.json`): two disjoint 500-question samples (seeds 2027 and 2028) drawn from questions with exactly 20 paragraphs, 2–4 hops. MuSiQue is released under CC BY 4.0 and its paragraphs are Wikipedia-derived; raw MuSiQue questions and passages are not redistributed here either, and `python -m src.load_musique` regenerates them (the second sample uses `--seed 2028 --exclude-questions-from data/musique_500/questions.json`).
 
-The upstream HotpotQA dataset card identifies the dataset as CC BY-SA 4.0. Review the dataset and source-content terms before distributing data or derived caches. The code repository itself currently has **no project-level `LICENSE`**; no license has been selected for original code. Model weights are not included; Phase B fetches the pinned BGE model snapshot when needed.
+The upstream HotpotQA dataset card identifies the dataset as CC BY-SA 4.0. Review the dataset and source-content terms before distributing data or derived caches. The original code in this repository is released under the [MIT License](LICENSE); that license covers the code only, not HotpotQA, MuSiQue, the BGE model weights, or any data derived from them, which keep their own upstream terms. Model weights are not included; Phase B fetches the pinned BGE model snapshot when needed.
 
 ## Methods and configurations
 
@@ -104,8 +104,8 @@ The independent Phase B audit was run against local raw per-question records and
 - Passage-level binary weighting, alternate sparsification controls, sentence-node graphs, entity-semantic graphs, alias-resolution ablations, bipartite-graph variants other than Phase C's passage–entity graph, local community retrieval, and validated typed relations remain untested.
 - No answer generation, Exact Match, token F1, evidence faithfulness, or manual faithfulness review has been performed.
 - LightRAG/Microsoft GraphRAG, Contriever and 2WikiMultiHopQA have not been run.
-- The project has no selected code license or published maintainer email. The published Git history has been sanitized; local review bundles are not included in the repository. Dataset and model terms remain separate from any future project code license.
-- The dataset and BGE model carry their own upstream terms; do not apply a future code license to them without checking compatibility.
+- There is no published maintainer email. The published Git history has been sanitized; local review bundles are not included in the repository. Dataset and model terms remain separate from the code license.
+- The dataset and BGE model carry their own upstream terms; the MIT license does not apply to them.
 
 Future research should add controlled repeated runs where a real source of stochasticity exists, validate entity extraction with an annotation protocol, complete a small justified graph matrix, and only then evaluate fixed-model/prompt/decoding answer generation and manually reviewed evidence faithfulness. Evaluate an established GraphRAG baseline after the retrieval pipeline and answer protocol are ready.
 
