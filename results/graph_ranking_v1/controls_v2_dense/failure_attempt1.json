@@ -1,0 +1,5 @@
+{
+  "error_type": "RuntimeError",
+  "error": "hotpot498: expected all second-hop embeddings cached, found 2490 missing",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/graphrag-construction-sensitivity/src/evaluate_dense_hop2.py\", line 104, in main\n    rows_by_run = {n: run_dataset(n, results_root, out_root, results_root / \"cache\", model) for n in RUNS}\n                      ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/graphrag-construction-sensitivity/src/evaluate_dense_hop2.py\", line 72, in run_dataset\n    raise RuntimeError(f\"{name}: expected all second-hop embeddings cached, found {info['new_query_count']} missing\")\nRuntimeError: hotpot498: expected all second-hop embeddings cached, found 2490 missing\n"
+}

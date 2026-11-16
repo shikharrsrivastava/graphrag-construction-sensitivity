@@ -1,0 +1,5 @@
+comparison,metric,n_questions,mean_a,mean_b,mean_paired_difference,diff_ci95_low,diff_ci95_high,questions_a_better,questions_b_better,p_value,group,status,holm_adjusted_p,holm_family,significant_holm_0_05
+dense_hop2 - vanilla_bge,complete_support_at_5,498,0.7891566265060241,0.8152610441767069,-0.02610441767068273,-0.050200803212851405,-0.002008032128514056,14,27,0.057147142642867854,hotpot498,PREREGISTERED_CONFIRMATORY,0.11429428528573571,2 tests within group,False
+ppr_entity_loo - dense_hop2,complete_support_at_5,498,0.7871485943775101,0.7891566265060241,-0.002008032128514056,-0.03815261044176707,0.03614457831325301,43,44,1.0,hotpot498,PREREGISTERED_CONFIRMATORY,1.0,2 tests within group,False
+dense_hop2 - vanilla_bge,complete_support_at_5,1000,0.369,0.354,0.015,-0.006,0.036,67,52,0.2024398780060997,musique_pooled,PREREGISTERED_CONFIRMATORY,0.2024398780060997,2 tests within group,False
+ppr_entity_loo - dense_hop2,complete_support_at_5,1000,0.475,0.369,0.106,0.078,0.134,158,52,4.999750012499375e-05,musique_pooled,PREREGISTERED_CONFIRMATORY,9.99950002499875e-05,2 tests within group,True
