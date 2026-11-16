@@ -148,6 +148,13 @@ class MusiqueLoaderTests(unittest.TestCase):
         self.assertEqual(q["unique_context_passage_count"], 19)
         self.assertFalse(is_eligible(q))
 
+    def test_case_only_variant_shares_id_and_keeps_first_text(self):
+        r1, r2 = raw_musique("2hop__a_0"), raw_musique("2hop__b_0")
+        r2["paragraphs"][0]["paragraph_text"] = "TEXT 0"
+        qs, ps, _ = sample_questions([r1, r2], 2, 0)
+        self.assertEqual(qs[0]["context_passage_ids"][0], qs[1]["context_passage_ids"][0])
+        self.assertEqual(sum(p["title"] == "T0" for p in ps), 1)
+
     def test_sampling_is_deterministic_and_filters(self):
         recs = [raw_musique(f"2hop__{i}_0") for i in range(30)] + [raw_musique("2hop__short", n=18)]
         a, _, eligible = sample_questions(recs, 10, 2027)

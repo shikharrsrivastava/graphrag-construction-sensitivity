@@ -1,0 +1,36 @@
+{
+  "dataset": "bdsaglam/musique",
+  "file": "musique_ans_v1.0_dev.jsonl",
+  "revision": "22873a405dd809893b22ada0b499299fb612d2df",
+  "split": "validation",
+  "source_question_count": 2417,
+  "eligible_question_count": 1901,
+  "eligibility": "exactly 20 unique paragraphs, >=2 gold paragraphs",
+  "sampling": "IDs sorted lexicographically; numpy.random.default_rng(seed).choice without replacement",
+  "seed": 2028,
+  "excluded_question_ids_from": "data/musique_500/questions.json",
+  "excluded_question_count": 500,
+  "loaded_questions": 500,
+  "unique_passages": 7031,
+  "hop_distribution": {
+    "2hop": 272,
+    "3hop": 152,
+    "4hop": 76
+  },
+  "musique_type_distribution": {
+    "2hop": 272,
+    "3hop1": 111,
+    "3hop2": 41,
+    "4hop1": 41,
+    "4hop2": 14,
+    "4hop3": 21
+  },
+  "gold_support_count_distribution": {
+    "2": 272,
+    "3": 152,
+    "4": 76
+  },
+  "question_ids_sha256": "fb16d8459458bdd1afd3da2582678050401894d131159dbfe42608c73d82af04",
+  "sorted_passage_ids_sha256": "bcee035b5dc5f8aac89ded176faa8059f290c275aa4d79ea8befd8505d309a4e",
+  "license_note": "MuSiQue is released under CC BY 4.0; paragraphs are Wikipedia-derived. Do not redistribute without review."
+}

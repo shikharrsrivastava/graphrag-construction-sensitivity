@@ -17,7 +17,7 @@ from typing import Any, Iterable
 import numpy as np
 
 from src.common import ROOT, write_json
-from src.load_data import make_passage_id
+from src.load_data import make_passage_id, normalize_passage_text, normalize_title
 
 REPO_ID = "bdsaglam/musique"
 REVISION = "22873a405dd809893b22ada0b499299fb612d2df"
@@ -89,7 +89,11 @@ def sample_questions(records: Iterable[dict[str, Any]], limit: int, seed: int,
     passages: dict[str, dict[str, Any]] = {}
     for _, ps in chosen:
         for p in ps:
-            if p["passage_id"] in passages and passages[p["passage_id"]]["text"] != p["text"]:
+            prev = passages.get(p["passage_id"])
+            # make_passage_id case-folds and collapses whitespace (the project's equality rule), so a
+            # case-only variant shares an ID; the first-seen text is kept. Anything else is a real collision.
+            if prev and (normalize_title(prev["title"]), normalize_passage_text([prev["text"]])) != \
+                    (normalize_title(p["title"]), normalize_passage_text([p["text"]])):
                 raise ValueError(f"Passage ID collision for {p['passage_id']}")
             passages.setdefault(p["passage_id"], p)
     return [c[0] for c in chosen], sorted(passages.values(), key=lambda p: p["passage_id"]), len(eligible)

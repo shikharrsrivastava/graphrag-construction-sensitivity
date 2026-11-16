@@ -21,7 +21,7 @@ from src.common import ROOT  # noqa: E402
 from src.evaluate_dense_graph import bootstrap_mean_ci, dump_csv, holm_adjust  # noqa: E402
 from src.evaluate_graph_ranking import STAT_SEED, paired_diff  # noqa: E402
 
-DATASETS = {"hotpot498": "HotpotQA (n=498)", "musique500": "MuSiQue (n=500)"}
+DATASETS = {"hotpot498": "HotpotQA (n=498)", "musique500": "MuSiQue (n=500)", "musique500_rep": "MuSiQue replication (n=500)"}
 GRAPH_CONFIGS = ["ppr_entity", "ppr_chunk", "ppr_entity_loo", "ppr_chunk_loo",
                  "ppr_entity_lambda0.25", "ppr_entity_lambda0.75", "ppr_chunk_lambda0.25", "ppr_chunk_lambda0.75"]
 MAIN = ["ppr_entity", "ppr_chunk"]
@@ -164,7 +164,7 @@ def fig_complete_support(all_rows, path):
     labels = {"bm25": "BM25", "vanilla_bge": "BGE (dense)", "ppr_entity": "BGE + entity-graph PPR",
               "ppr_chunk": "BGE + chunk-graph PPR", "ppr_entity_loo": "BGE + entity-graph LOO-PPR*",
               "ppr_chunk_loo": "BGE + chunk-graph LOO-PPR*"}
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8), sharey=True)
+    fig, axes = plt.subplots(1, len(DATASETS), figsize=(4.6 * len(DATASETS) + 1.6, 3.9), sharey=True)
     for ax, (ds, title) in zip(axes, DATASETS.items()):
         cis = method_cis(all_rows[ds], ds, configs)
         ys = np.arange(len(configs))[::-1]
@@ -180,51 +180,54 @@ def fig_complete_support(all_rows, path):
         ax.set_yticks(ys, [labels[c] for c in configs])
         ax.set_xlim(0, 1.0)
         ax.set_title(title, fontsize=10.5, color=TEXT, loc="left")
-        ax.set_xlabel("Complete support@5 (all gold passages in top 5)", fontsize=9, color=MUTED)
+        ax.set_xlabel("Complete support@5", fontsize=9, color=MUTED)
         style_axes(ax)
     fig.text(0.01, 0.005, "Bars: mean over questions; whiskers: 95% question-bootstrap CI (10,000 replicates). "
-             "Dashed line: BGE. *Hatched = EXPLORATORY variant added after the smoke test.", fontsize=7.5, color=MUTED)
-    fig.tight_layout(rect=(0, 0.04, 1, 1))
+             "Dashed line: BGE. Complete support@5 = all gold passages in the top 5.\n"
+             "*Hatched = leave-one-out (LOO) variant: exploratory on HotpotQA and the first MuSiQue sample; "
+             "its MuSiQue gain was then tested, as pre-registered, on the disjoint replication sample.", fontsize=7.5, color=MUTED)
+    fig.tight_layout(rect=(0, 0.08, 1, 1))
     fig.savefig(path, dpi=200)
     plt.close(fig)
 
 
-def fig_gold_movement(raws, path):
-    configs = [("ppr_entity", "Entity PPR"), ("ppr_chunk", "Chunk PPR"),
-               ("ppr_entity_loo", "Entity LOO-PPR*"), ("ppr_chunk_loo", "Chunk LOO-PPR*")]
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), sharey=True)
+def fig_gold_movement(gold_rows, path):
+    """Gold passages entering vs leaving the top 5 relative to BGE (what moves complete support@5)."""
+    configs = [("ppr_entity", "Entity\nPPR"), ("ppr_chunk", "Chunk\nPPR"),
+               ("ppr_entity_loo", "Entity\nLOO-PPR*"), ("ppr_chunk_loo", "Chunk\nLOO-PPR*")]
+    fig, axes = plt.subplots(1, len(DATASETS), figsize=(4.6 * len(DATASETS), 3.7), sharey=True)
     width = 0.38
     for ax, (ds, title) in zip(axes, DATASETS.items()):
+        rec = {r["config"]: r for r in gold_rows if r["dataset"] == ds}
         xs = np.arange(len(configs))
-        up = [int((raws[ds][c] < 0).sum()) for c, _ in configs]
-        down = [int((raws[ds][c] > 0).sum()) for c, _ in configs]
         for i, (c, _) in enumerate(configs):
             key = "entity" if "entity" in c else "chunk"
             hatch = "////" if c.endswith("_loo") else None
-            ax.bar(xs[i] - width / 2 - 0.01, up[i], width, color=COLOR[key], hatch=hatch, edgecolor="white", linewidth=0)
-            ax.bar(xs[i] + width / 2 + 0.01, down[i], width, color="#c3c2b7", hatch=hatch, edgecolor="white", linewidth=0)
-            ax.text(xs[i] - width / 2, up[i] + 3, str(up[i]), ha="center", fontsize=8, color=TEXT)
-            ax.text(xs[i] + width / 2, down[i] + 3, str(down[i]), ha="center", fontsize=8, color=TEXT)
-        n = len(raws[ds][configs[0][0]])
-        ax.set_xticks(xs, [lbl for _, lbl in configs], fontsize=8.5)
-        ax.set_title(f"{title}: {n} gold passages", fontsize=10.5, color=TEXT, loc="left")
-        ax.set_ylabel("Gold passages", fontsize=9, color=MUTED)
+            entered, left = rec[c]["entered_top5"], rec[c]["left_top5"]
+            ax.bar(xs[i] - width / 2 - 0.01, entered, width, color=COLOR[key], hatch=hatch, edgecolor="white", linewidth=0)
+            ax.bar(xs[i] + width / 2 + 0.01, -left, width, color="#c3c2b7", hatch=hatch, edgecolor="white", linewidth=0)
+            ax.text(xs[i] - width / 2, entered + 4, (f"+{entered}" if entered else "0"), ha="center", fontsize=8, color=TEXT)
+            ax.text(xs[i] + width / 2, -left - 4, (f"\u2212{left}" if left else "0"), ha="center", va="top", fontsize=8, color=TEXT)
+        ax.axhline(0, color=MUTED, linewidth=0.8)
+        ax.set_xticks(xs, [lbl for _, lbl in configs], fontsize=8, rotation=0)
+        ax.set_title(title, fontsize=10.5, color=TEXT, loc="left")
         style_axes(ax)
         ax.grid(axis="y", color=GRID, linewidth=0.8)
         ax.grid(axis="x", visible=False)
-    from matplotlib.patches import Patch
-    axes[0].legend(handles=[Patch(color="#6f6e6a", label="moved up vs BGE (colored bar)"),
-                            Patch(color="#c3c2b7", label="moved down vs BGE (gray bar)")],
-                   frameon=False, fontsize=8, loc="upper left")
-    fig.text(0.01, 0.005, "Rank change of each gold passage relative to BGE's ranking (unchanged passages not shown). "
-             "*EXPLORATORY.", fontsize=7.5, color=MUTED)
-    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    axes[0].set_ylabel("Gold passages", fontsize=9, color=MUTED)
+    ymax = max(abs(v) for a in axes for v in a.get_ylim())
+    for a in axes:
+        a.set_ylim(-ymax * 1.12, ymax * 1.12)
+    fig.text(0.01, 0.005, "Above zero (colored): gold passages outside BGE's top 5 that the method moved into the top 5. "
+             "Below zero (gray): gold passages in BGE's top 5 that the method pushed out. *EXPLORATORY variant.",
+             fontsize=7.5, color=MUTED)
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig(path, dpi=200)
     plt.close(fig)
 
 
 def fig_lambda(lam_rows, path):
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3.4), sharey=True)
+    fig, axes = plt.subplots(1, len(DATASETS), figsize=(4.6 * len(DATASETS), 3.4), sharey=True)
     for ax, (ds, title) in zip(axes, DATASETS.items()):
         for g, label in (("entity", "Entity PPR"), ("chunk", "Chunk PPR")):
             pts = sorted((r["lambda"], r) for r in lam_rows if r["dataset"] == ds and r["graph"] == g and r["metric"] == "complete_support_at_5")
@@ -251,11 +254,12 @@ def fig_lambda(lam_rows, path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--results-root", default="results/graph_ranking_v1")
-    parser.add_argument("--analysis-dir", default="results/graph_ranking_v1/analysis")
+    parser.add_argument("--analysis-dir", default="results/graph_ranking_v1/analysis_final")
+    parser.add_argument("--figures-dir", default="results/graph_ranking_v1/figures/final")
     args = parser.parse_args()
     root = ROOT / args.results_root
     out = ROOT / args.analysis_dir
-    figs = root / "figures"
+    figs = ROOT / args.figures_dir
     for d in (out, figs):
         if d.exists() and any(d.iterdir()):
             raise FileExistsError(f"Refusing to overwrite {d}")
@@ -286,7 +290,7 @@ def main():
                                                             "question_group_counts": group_counts, "outputs": names,
                                                             "note": "All tables except the headline file are EXPLORATORY."}, indent=2) + "\n")
     fig_complete_support(all_rows, figs / "fig1_complete_support_at5.png")
-    fig_gold_movement(raws, figs / "fig2_gold_rank_movement.png")
+    fig_gold_movement(tables["gold_move"], figs / "fig2_gold_top5_entry_exit.png")
     fig_lambda(tables["lambda"], figs / "fig3_lambda_sensitivity.png")
     print(f"wrote {len(names)} tables to {out} and 3 figures to {figs}")
 
