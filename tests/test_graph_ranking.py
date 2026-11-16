@@ -69,7 +69,17 @@ class GraphTests(unittest.TestCase):
         scores = gr.graph_passage_scores(g, {pid: f"p::{pid}" for pid in ctx}, ["a"])
         self.assertGreater(scores["b"], scores["c"])  # one shared entity away vs two
         self.assertGreater(scores["c"], scores["d"])
-        self.assertAlmostEqual(scores["d"], 0.0, places=12)
+        self.assertEqual(scores["d"], 0.0)
+
+    def test_loo_ppr_excludes_own_restart_mass(self):
+        ctx = ["a", "b", "c", "d"]
+        g = gr.build_passage_entity_graph(ctx, extractions(), passages(), "q")
+        nodes = {pid: f"p::{pid}" for pid in ctx}
+        loo = gr.graph_passage_scores_loo(g, nodes, ["a", "b"])
+        plain = gr.graph_passage_scores(g, nodes, ["a", "b"])
+        self.assertLess(loo["a"], plain["a"])  # seed no longer credited for its own restart mass
+        self.assertGreater(loo["a"], 0.0)       # but still supported by seed b through "john smith"
+        self.assertEqual(loo["d"], 0.0)
 
     def test_evaluate_question_rows_are_permutations(self):
         ps = passages()
@@ -78,7 +88,8 @@ class GraphTests(unittest.TestCase):
         q = {"question_id": "q", "question": "Where was the Alpha Band founder born?", "type": "bridge",
              "context_passage_ids": list(ps), "gold_supporting_passage_ids": ["a", "b"]}
         rows = gr.evaluate_question(q, ps, extractions(), emb, emb["a"])
-        self.assertEqual([r["config"] for r in rows], gr.CONFIGS)
+        self.assertEqual(sorted(r["config"] for r in rows), sorted(gr.CONFIGS))
+        self.assertEqual(len(rows), len(gr.CONFIGS))
         for r in rows:
             self.assertEqual(sorted(r["ranked_passage_ids"]), sorted(ps))
             for pid, rank in r["gold_ranks"].items():

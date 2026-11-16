@@ -71,6 +71,12 @@ Shared: BGE = `BAAI/bge-small-en-v1.5` at revision `5c38ec7c405ec4b44b94cc5a9bb9
 
 Answer generation, EM/F1, faithfulness, LightRAG/MS GraphRAG, Contriever, 2WikiMultiHopQA, entity-extraction validation, and tuning λ, alpha or the seed count.
 
+## Exploratory addendum (post-smoke, pre-full-run; NOT confirmatory)
+
+**2026-11-16.** The 20-question HotpotQA smoke test was checked for mechanics only; no accuracy metric was inspected. `ppr_entity` changed BGE's top-5 on 0/20 questions and `ppr_chunk` on 7/20. With uniform restart on the top-5 seeds, the seeds hold most of the PPR mass, so non-seed passages linked through entities rarely overtake them.
+
+One exploratory variant per graph was therefore added before any full run: `ppr_entity_loo` and `ppr_chunk_loo`. Each passage's graph score is the PPR mass it receives when it is itself removed from the seed set (leave-one-out), combined with λ = 0.5. These variants are not part of the Holm family and must always be labelled EXPLORATORY. Their paired tests against `vanilla_bge` are reported with their own Holm correction across the two variants × two metrics.
+
 ## Amendments
 
 1. **2026-11-16, before the evaluator was run on any question.** I specified "normalized title" as follows: remove a single trailing parenthetical disambiguator (for example `Green (album)` becomes `green`), then apply `normalize_entity`. Without this, Wikipedia-style titles could never match a plain mention. No result had been computed when this was fixed.

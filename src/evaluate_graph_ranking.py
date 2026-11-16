@@ -46,7 +46,8 @@ def config_name(graph: str, lam: float) -> str:
     return f"ppr_{graph}" if lam == HEADLINE_LAMBDA else f"ppr_{graph}_lambda{lam}"
 
 
-CONFIGS = ["bm25", "vanilla_tfidf", "vanilla_bge"] + [config_name(g, lam) for g in ("entity", "chunk") for lam in LAMBDAS]
+CONFIGS = (["bm25", "vanilla_tfidf", "vanilla_bge"] + [config_name(g, lam) for g in ("entity", "chunk") for lam in LAMBDAS]
+           + ["ppr_entity_loo", "ppr_chunk_loo"])  # *_loo: EXPLORATORY, added after the smoke test (see pre-registration)
 PREREGISTERED_CONFIGS = {"bm25", "vanilla_bge", "ppr_entity", "ppr_chunk"}
 
 
@@ -117,6 +118,15 @@ def personalized_pagerank(graph: nx.Graph, seed_nodes: list[str]) -> dict[str, f
 def graph_passage_scores(graph: nx.Graph, node_of_pid: dict[str, str], seeds: list[str]) -> dict[str, float]:
     pr = personalized_pagerank(graph, [node_of_pid[pid] for pid in seeds])
     return {pid: float(pr[node]) for pid, node in node_of_pid.items()}
+
+
+def graph_passage_scores_loo(graph: nx.Graph, node_of_pid: dict[str, str], seeds: list[str]) -> dict[str, float]:
+    """EXPLORATORY: score each passage by the PPR mass it receives when it is excluded from the seeds."""
+    out = {}
+    for pid, node in node_of_pid.items():
+        others = [node_of_pid[s] for s in seeds if s != pid]
+        out[pid] = float(personalized_pagerank(graph, others)[node])
+    return out
 
 
 def combine(bge: dict[str, float], graph: dict[str, float], lam: float) -> dict[str, float]:
@@ -200,6 +210,12 @@ def evaluate_question(q: dict[str, Any], passage_by_id: dict[str, dict[str, Any]
             ranked = rank_contexts(contexts, final, bge)
             rows.append(row_for(q, config_name(gname, lam), ranked,
                                 {"seconds": build_s + ppr_s, "lambda": lam, "graph": gname, **stats}))
+        t0 = time.perf_counter()
+        loo = graph_passage_scores_loo(graph, node_of_pid, seeds)
+        loo_s = time.perf_counter() - t0
+        ranked = rank_contexts(contexts, combine(bge, loo, HEADLINE_LAMBDA), bge)
+        rows.append(row_for(q, f"ppr_{gname}_loo", ranked,
+                            {"seconds": build_s + loo_s, "lambda": HEADLINE_LAMBDA, "graph": gname, **stats}))
     return rows
 
 

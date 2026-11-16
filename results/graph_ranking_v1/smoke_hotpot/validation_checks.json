@@ -1,0 +1,9 @@
+{
+  "question_count": 20,
+  "row_count": 180,
+  "expected_rows": 180,
+  "ranking_permutation_failures": [],
+  "questions_with_missing_configs": [],
+  "gold_rank_failures": [],
+  "all_passed": true
+}
