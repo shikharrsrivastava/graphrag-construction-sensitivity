@@ -46,5 +46,15 @@ class ControlTests(unittest.TestCase):
             self.assertEqual(sorted(r["ranked_passage_ids"]), sorted(ps))
 
 
-if __name__ == "__main__":
+class DenseHop2Tests(unittest.TestCase):
+    def test_dense_hop2_is_leave_one_out_and_min_max_scaled(self):
+        from src import evaluate_dense_hop2 as dh
+        d = {"a": {"a": 9.0, "b": 1.0, "c": 3.0}, "b": {"a": 2.0, "b": 8.0, "c": 4.0}}
+        out = dh.dense_hop2_scores(["a", "b", "c"], ["a", "b"], d)
+        self.assertEqual(out["a"], 0.0)   # only seed b counts: minmax gives a -> 0.0
+        self.assertEqual(out["b"], 0.0)   # only seed a counts: minmax gives b -> 0.0
+        self.assertAlmostEqual(out["c"], 0.5 * (0.25 + 0.3333333333333333), places=12)
+
+
+if __name__ == "__main__":  # keep unittest discovery entry point last
     unittest.main()
