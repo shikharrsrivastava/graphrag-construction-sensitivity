@@ -155,6 +155,9 @@ class MusiqueLoaderTests(unittest.TestCase):
         self.assertEqual(eligible, 30)
         self.assertEqual([q["question_id"] for q in a], [q["question_id"] for q in b])
         self.assertNotIn("2hop__short", {q["question_id"] for q in a})
+        c, _, eligible_c = sample_questions(recs, 10, 2028, {q["question_id"] for q in a})
+        self.assertEqual(eligible_c, 20)
+        self.assertFalse({q["question_id"] for q in a} & {q["question_id"] for q in c})
 
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+{
+  "inputs": {
+    "hotpot498": "results/graph_ranking_v1/hotpot498/question_results.jsonl",
+    "musique500": "results/graph_ranking_v1/musique500/question_results.jsonl"
+  },
+  "question_group_counts": {
+    "hotpot498": {
+      "bridge": 404,
+      "comparison": 94
+    },
+    "musique500": {
+      "2hop": 252,
+      "3hop": 159,
+      "4hop": 89
+    }
+  },
+  "outputs": {
+    "headline": "preregistered_headline_contrasts_both.csv",
+    "by_group": "exploratory_by_question_type.csv",
+    "loo": "exploratory_loo_contrasts.csv",
+    "lambda": "exploratory_lambda_sensitivity.csv",
+    "top5": "exploratory_top5_changes.csv",
+    "gold_move": "exploratory_gold_rank_movement.csv",
+    "conditional": "exploratory_conditional_on_bge_failure.csv",
+    "headroom": "exploratory_headroom.csv"
+  },
+  "note": "All tables except the headline file are EXPLORATORY."
+}

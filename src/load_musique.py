@@ -76,9 +76,12 @@ def is_eligible(question: dict[str, Any]) -> bool:
             and set(question["gold_supporting_passage_ids"]) <= set(question["context_passage_ids"]))
 
 
-def sample_questions(records: Iterable[dict[str, Any]], limit: int, seed: int) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+def sample_questions(records: Iterable[dict[str, Any]], limit: int, seed: int,
+                     exclude_ids: set[str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
     converted = [convert_record(r) for r in records]
-    eligible = sorted((c for c in converted if is_eligible(c[0])), key=lambda c: c[0]["question_id"])
+    exclude_ids = exclude_ids or set()
+    eligible = sorted((c for c in converted if is_eligible(c[0]) and c[0]["question_id"] not in exclude_ids),
+                      key=lambda c: c[0]["question_id"])
     if len(eligible) < limit:
         raise ValueError(f"Only {len(eligible)} eligible questions for limit {limit}")
     idx = np.random.default_rng(seed).choice(len(eligible), size=limit, replace=False)
@@ -103,7 +106,13 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=2027)
     parser.add_argument("--revision", default=REVISION)
     parser.add_argument("--output-dir", default="data/musique_500")
+    parser.add_argument("--exclude-questions-from", default=None,
+                        help="questions.json of an earlier sample whose IDs must not be drawn again")
     args = parser.parse_args()
+    exclude: set[str] = set()
+    if args.exclude_questions_from:
+        with open(args.exclude_questions_from, encoding="utf-8") as handle:
+            exclude = {str(q["question_id"]) for q in json.load(handle)}
     out = Path(args.output_dir)
     out = out if out.is_absolute() else ROOT / out
     if (out / "questions.json").exists():
@@ -113,7 +122,7 @@ def main() -> None:
     path = hf_hub_download(REPO_ID, FILES[args.split], repo_type="dataset", revision=args.revision)
     with open(path, encoding="utf-8") as handle:
         records = [json.loads(line) for line in handle if line.strip()]
-    questions, passages, eligible_n = sample_questions(records, args.limit, args.seed)
+    questions, passages, eligible_n = sample_questions(records, args.limit, args.seed, exclude)
     contexts = {q["question_id"]: {"context_passage_ids": q["context_passage_ids"],
                                    "gold_supporting_passage_ids": q["gold_supporting_passage_ids"]} for q in questions}
     manifest = {
@@ -121,7 +130,8 @@ def main() -> None:
         "source_question_count": len(records), "eligible_question_count": eligible_n,
         "eligibility": f"exactly {EXPECTED_CONTEXTS} unique paragraphs, >=2 gold paragraphs",
         "sampling": "IDs sorted lexicographically; numpy.random.default_rng(seed).choice without replacement",
-        "seed": args.seed, "loaded_questions": len(questions), "unique_passages": len(passages),
+        "seed": args.seed, "excluded_question_ids_from": args.exclude_questions_from,
+        "excluded_question_count": len(exclude), "loaded_questions": len(questions), "unique_passages": len(passages),
         "hop_distribution": dict(sorted(Counter(q["type"] for q in questions).items())),
         "musique_type_distribution": dict(sorted(Counter(q["musique_type"] for q in questions).items())),
         "gold_support_count_distribution": {str(k): v for k, v in sorted(Counter(len(q["gold_supporting_passage_ids"]) for q in questions).items())},

@@ -1,0 +1,126 @@
+{
+  "stage": "Phase C graph-aware ranking",
+  "preregistration": "PREREGISTRATION_graph_ranking.md",
+  "data_dir": "data/musique_500",
+  "dataset_manifest": {
+    "dataset": "bdsaglam/musique",
+    "file": "musique_ans_v1.0_dev.jsonl",
+    "revision": "22873a405dd809893b22ada0b499299fb612d2df",
+    "split": "validation",
+    "source_question_count": 2417,
+    "eligible_question_count": 2401,
+    "eligibility": "exactly 20 unique paragraphs, >=2 gold paragraphs",
+    "sampling": "IDs sorted lexicographically; numpy.random.default_rng(seed).choice without replacement",
+    "seed": 2027,
+    "loaded_questions": 500,
+    "unique_passages": 6867,
+    "hop_distribution": {
+      "2hop": 252,
+      "3hop": 159,
+      "4hop": 89
+    },
+    "musique_type_distribution": {
+      "2hop": 252,
+      "3hop1": 124,
+      "3hop2": 35,
+      "4hop1": 50,
+      "4hop2": 12,
+      "4hop3": 27
+    },
+    "gold_support_count_distribution": {
+      "2": 252,
+      "3": 159,
+      "4": 89
+    },
+    "question_ids_sha256": "b209ae8ea078c52615bcce0a10a53058f4b057a718152e166f5a06a67abf69d8",
+    "sorted_passage_ids_sha256": "c4fbfefbb455c0a43219a1ec72be54bebf6dacaf8a19f7782515cec9b9e3ad41",
+    "license_note": "MuSiQue is released under CC BY 4.0; paragraphs are Wikipedia-derived. Do not redistribute without review."
+  },
+  "question_count": 500,
+  "expected_context_count": 20,
+  "excluded_variable_context_question_ids": [],
+  "limit": null,
+  "question_type_counts": {
+    "2hop": 252,
+    "3hop": 159,
+    "4hop": 89
+  },
+  "configs": [
+    "bm25",
+    "vanilla_tfidf",
+    "vanilla_bge",
+    "ppr_entity_lambda0.25",
+    "ppr_entity",
+    "ppr_entity_lambda0.75",
+    "ppr_chunk_lambda0.25",
+    "ppr_chunk",
+    "ppr_chunk_lambda0.75",
+    "ppr_entity_loo",
+    "ppr_chunk_loo"
+  ],
+  "preregistered_configs": [
+    "bm25",
+    "ppr_chunk",
+    "ppr_entity",
+    "vanilla_bge"
+  ],
+  "headline_lambda": 0.5,
+  "lambdas": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seed_k": 5,
+  "ppr_alpha": 0.85,
+  "chunk_knn_k": 2,
+  "bm25": {
+    "impl": "rank_bm25.BM25Okapi",
+    "k1": 1.5,
+    "b": 0.75,
+    "tokenizer": "lowercase \\w+"
+  },
+  "dense_model": {
+    "model_id": "BAAI/bge-small-en-v1.5",
+    "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "device": "cpu",
+    "passage_cache": {
+      "new_embedding_count": 6867,
+      "cache_hit_count": 0,
+      "embedding_compute_seconds": 121.53005201500014,
+      "cache_path": "results/graph_ranking_v1/cache/embeddings/5c38ec7c405ec4b44b94cc5a9bb96e735b38267a/passages.npz"
+    },
+    "query_cache": {
+      "new_query_count": 500,
+      "cache_hit_count": 0,
+      "query_compute_seconds": 2.4751086619999114
+    }
+  },
+  "entity_extraction": {
+    "model": "en_core_web_sm",
+    "model_version": "3.8.0",
+    "requested_unique_passages": 6867,
+    "cache_hits": 0,
+    "newly_extracted": 6867,
+    "new_extraction_seconds": 82.54093682600865,
+    "cache_load_and_prepare_seconds": 83.54997704499988
+  },
+  "stat_seed": 2027,
+  "bootstrap_replicates": 10000,
+  "sign_flip_draws": 20000,
+  "packages": {
+    "numpy": "2.5.5",
+    "networkx": "3.7",
+    "rank-bm25": "0.2.2",
+    "scikit-learn": "1.9.1",
+    "sentence-transformers": "6.3.0",
+    "torch": "2.15.0",
+    "transformers": "5.23.0",
+    "spacy": "3.8.18",
+    "en-core-web-sm": "3.8.0",
+    "python": "3.13.18"
+  },
+  "platform": "Linux-6.18.44-fc-v470-x86_64-with-glibc2.39",
+  "peak_rss_mb": 1836.5078125,
+  "total_seconds": 282.878170987
+}

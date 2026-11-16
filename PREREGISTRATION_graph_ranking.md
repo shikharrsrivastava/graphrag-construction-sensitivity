@@ -77,6 +77,18 @@ Answer generation, EM/F1, faithfulness, LightRAG/MS GraphRAG, Contriever, 2WikiM
 
 One exploratory variant per graph was therefore added before any full run: `ppr_entity_loo` and `ppr_chunk_loo`. Each passage's graph score is the PPR mass it receives when it is itself removed from the seed set (leave-one-out), combined with λ = 0.5. These variants are not part of the Holm family and must always be labelled EXPLORATORY. Their paired tests against `vanilla_bge` are reported with their own Holm correction across the two variants × two metrics.
 
+## Confirmatory replication (registered 2026-11-16, AFTER the Phase C results above; before the replication run)
+
+**Motivation.** In the exploratory analysis of `musique500`, `ppr_entity_loo` raised complete_support@5 over `vanilla_bge` by +0.118 (Holm p = 0.0002 within the exploratory family). The pre-registered `ppr_chunk` result (+0.026, Holm p = 0.040) was borderline. Both observations are now tested on fresh data with no further changes to any method.
+
+* **Sample:** `data/musique_500_rep`, drawn from the same pinned MuSiQue file with the same eligibility rule. The 500 `musique500` IDs are excluded first, and 500 are then drawn with `numpy.random.default_rng(2028)`. The two samples are disjoint.
+* **Code:** `src/evaluate_graph_ranking.py` exactly as used for `musique500`, so `ppr_entity_loo` keeps λ = 0.5, alpha = 0.85 and the top-5 seeds.
+* **Tests (Holm across these 4):**
+  1. `ppr_entity_loo − vanilla_bge` on complete_support@5 (**primary**) and on Recall@5.
+  2. `ppr_chunk − vanilla_bge` on complete_support@5 and on Recall@5.
+* **Decision rule:** a finding is "replicated" iff it has the same sign and Holm p < 0.05 on the replication sample. Otherwise it is reported as not replicated, whatever the first sample showed.
+* **Output:** `results/graph_ranking_v1/musique500_rep/replication_contrasts.csv`.
+
 ## Amendments
 
 1. **2026-11-16, before the evaluator was run on any question.** I specified "normalized title" as follows: remove a single trailing parenthetical disambiguator (for example `Green (album)` becomes `green`), then apply `normalize_entity`. Without this, Wikipedia-style titles could never match a plain mention. No result had been computed when this was fixed.
