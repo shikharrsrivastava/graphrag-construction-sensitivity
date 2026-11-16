@@ -1,0 +1,6 @@
+{
+  "question_count": 500,
+  "control_rows": 1500,
+  "expected_rows": 1500,
+  "ppr_entity_loo_recomputation_mismatches": 0
+}

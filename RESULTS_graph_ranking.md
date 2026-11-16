@@ -41,6 +41,21 @@ Because this was exploratory, a **replication was pre-registered and committed b
 | ppr_chunk, complete-support@5 | 0.358 → 0.374 | +0.016 [−0.004, +0.036] | 17 / 9 | 0.34 | no |
 | ppr_chunk, Recall@5 | 0.678 → 0.679 | +0.002 [−0.009, +0.012] | 30 / 24 | 0.72 | no |
 
+## Controls: is it the graph, and is it the titles? (pre-registered in PREREGISTRATION_controls.md)
+
+Two controls were registered and run after the replication (complete-support@5, MuSiQue pooled over both disjoint samples, n = 1,000; Holm over 5 tests per group; the recomputed LOO rankings matched the stored ones on all questions).
+
+| MuSiQue pooled | complete-support@5 | Δ [95% CI] | Holm p |
+|---|---|---|---|
+| BGE | 0.354 | | |
+| Hybrid BGE+BM25 | 0.314 | −0.040 [−0.064, −0.016] vs BGE | 0.007 |
+| Hybrid + second-hop query (leave-one-out) | 0.324 | −0.030 [−0.053, −0.007] vs BGE | 0.029 |
+| LOO entity PPR | 0.475 | +0.151 [+0.121, +0.181] vs second-hop hybrid | 0.0003 |
+| LOO entity PPR, **no title nodes** | 0.470 | +0.116 [+0.085, +0.146] vs BGE | 0.0003 |
+| LOO entity PPR vs no-title version | 0.475 vs 0.470 | +0.005 [−0.006, +0.017] | 0.50 |
+
+By the rules fixed in advance: the non-graph hybrid control recovers none of the gain (it is slightly worse than BGE), so the gain is **graph-specific relative to this control**; and **title nodes are not necessary**, as the gain survives with spaCy entities only. On HotpotQA, removing titles makes the method worse than BGE (−0.050 [−0.086, −0.014], Holm p = 0.046), and the hybrids are no different from BGE (+0.002, +0.004). These controls are one design each: a stronger non-graph second-hop method (for example a trained reranker) is untested.
+
 ## Other exploratory results (unadjusted; descriptive)
 
 * **The same method does not help on HotpotQA.** `ppr_entity_loo` gives complete-support@5 of 0.787 vs 0.815 (−0.028 [−0.064, +0.008]). On bridge questions it is +0.012 (34 better / 29 worse). On comparison questions it is **−0.202** (0 better / 19 worse): those questions ask about two unconnected entities, so rewarding graph connectivity pushes out a gold passage. `ppr_chunk_loo` is negative or null on every sample (HotpotQA −0.042, MuSiQue −0.024, replication −0.004).
@@ -55,6 +70,7 @@ Because this was exploratory, a **replication was pre-registered and committed b
 * **One small embedding model** (BGE-small, pinned) and one PPR setting (α = 0.85, top-5 seeds, λ = 0.5). The LOO effect may differ with stronger retrievers.
 * **spaCy entities are not validated** against human labels. The entity graph is co-occurrence plus title matching, with no relation typing.
 * **Retrieval only.** No answer generation, EM/F1 or faithfulness, so a retrieval gain is not shown to improve answers.
+* **The non-graph control is one design** (BGE+BM25 with a top-passage-augmented query); a stronger second-hop retriever might close some of the gap. The embedding-only analogue (chunk-graph LOO) did not help.
 * **Two datasets, both Wikipedia-based**, with fixed samples: the HotpotQA questions are all "hard" and are not a simple random sample, and the MuSiQue questions are answerable, 20-paragraph ones. No 2WikiMultiHopQA run.
 * The LOO variant was conceived after seeing HotpotQA smoke-test top-5 change counts; whether accuracy was seen first cannot be verified from the repository. Its MuSiQue effect is replicated, but its λ, α and seed count were never varied.
 * This design (method, pre-registration and analysis) was drafted with an AI coding assistant and accepted by the project owner, because the originally intended patch was unavailable.
@@ -63,6 +79,6 @@ Because this was exploratory, a **replication was pre-registered and committed b
 
 Letting a simple graph influence ranking scores does not by itself help a strong dense retriever. Under the pre-registered design, entity-graph PPR left BGE's top 5 unchanged on all 998 questions. Chunk-graph PPR gave a small MuSiQue gain that did not replicate, and neither helped on HotpotQA.
 
-The graph matters only when the ranking rewards a passage for being connected to *other* strong evidence (leave-one-out PPR over an entity graph). In that case it improved complete supporting-evidence retrieval on MuSiQue by about 12 points, and the gain replicated on a disjoint sample (0.358 → 0.482, Holm p = 0.0002), with the largest gain on 3-hop questions. The same method did not help on HotpotQA and clearly hurt comparison questions.
+The graph matters only when the ranking rewards a passage for being connected to *other* strong evidence (leave-one-out PPR over an entity graph). A hybrid BGE+BM25 retriever with a second-hop query did not reproduce the gain (it was slightly worse than BGE), and the gain survived removing title nodes. In that case it improved complete supporting-evidence retrieval on MuSiQue by about 12 points, and the gain replicated on a disjoint sample (0.358 → 0.482, Holm p = 0.0002), with the largest gain on 3-hop questions. The same method did not help on HotpotQA and clearly hurt comparison questions.
 
 The supported claim is therefore narrow. In this setting, graph-aware ranking helps when the questions are chain-structured multi-hop questions, the dense retriever has headroom, and the graph signal excludes self-support. It does not help on saturated or comparison-style questions. Whether this transfers to answer quality, other retrievers, validated entity graphs or other datasets remains untested.
