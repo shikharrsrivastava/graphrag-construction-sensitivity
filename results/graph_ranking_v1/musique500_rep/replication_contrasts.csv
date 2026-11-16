@@ -1,0 +1,5 @@
+comparison,metric,n_questions,mean_a,mean_b,mean_paired_difference,diff_ci95_low,diff_ci95_high,questions_a_better,questions_b_better,p_value,role,holm_adjusted_p,holm_family,replicated,status
+ppr_entity_loo - vanilla_bge,complete_support_at_5,500,0.482,0.358,0.124,0.082,0.168,93,31,4.999750012499375e-05,primary,0.000199990000499975,4 registered replication tests,True,REGISTERED_REPLICATION
+ppr_entity_loo - vanilla_bge,recall_at_5,500,0.7196666666666667,0.6776666666666666,0.042,0.017162500000000004,0.06600416666666661,136,75,0.000999950002499875,secondary,0.002999850007499625,4 registered replication tests,True,REGISTERED_REPLICATION
+ppr_chunk - vanilla_bge,complete_support_at_5,500,0.374,0.358,0.016,-0.004,0.036,17,9,0.16899155042247888,secondary,0.33798310084495775,4 registered replication tests,False,REGISTERED_REPLICATION
+ppr_chunk - vanilla_bge,recall_at_5,500,0.6795,0.6776666666666666,0.001833333333333334,-0.008833333333333332,0.012166666666666668,30,24,0.7192140392980351,secondary,0.7192140392980351,4 registered replication tests,False,REGISTERED_REPLICATION

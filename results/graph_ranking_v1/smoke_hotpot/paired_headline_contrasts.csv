@@ -1,0 +1,7 @@
+comparison,metric,n_questions,mean_a,mean_b,mean_paired_difference,diff_ci95_low,diff_ci95_high,questions_a_better,questions_b_better,p_value,holm_adjusted_p,holm_family,significant_holm_0.05,status
+ppr_entity - vanilla_bge,complete_support_at_5,20,0.75,0.75,0.0,0.0,0.0,0,0,1.0,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY
+ppr_entity - vanilla_bge,recall_at_5,20,0.85,0.85,0.0,0.0,0.0,0,0,1.0,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY
+ppr_chunk - vanilla_bge,complete_support_at_5,20,0.75,0.75,0.0,0.0,0.0,0,0,1.0,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY
+ppr_chunk - vanilla_bge,recall_at_5,20,0.85,0.85,0.0,0.0,0.0,0,0,1.0,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY
+vanilla_bge - bm25,complete_support_at_5,20,0.75,0.55,0.2,-0.05,0.45,6,2,0.28593570321483924,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY
+vanilla_bge - bm25,recall_at_5,20,0.85,0.775,0.075,-0.1,0.225,6,2,0.5642217889105545,1.0,6 tests within this dataset,False,PREREGISTERED_CONFIRMATORY

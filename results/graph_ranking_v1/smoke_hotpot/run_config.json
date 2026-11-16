@@ -1,0 +1,129 @@
+{
+  "stage": "Phase C graph-aware ranking",
+  "preregistration": "PREREGISTRATION_graph_ranking.md",
+  "data_dir": "data/pilot_500_v2",
+  "dataset_manifest": {
+    "dataset": "hotpotqa/hotpot_qa",
+    "config": "distractor",
+    "split": "validation",
+    "requested_question_limit": 500,
+    "loaded_questions": 500,
+    "unique_question_ids": 500,
+    "unique_passages": 4947,
+    "stream_shuffle_seed": 2027,
+    "shuffle_buffer_size": 10000,
+    "difficulty_distribution": {
+      "hard": 500
+    },
+    "question_type_distribution": {
+      "bridge": 404,
+      "comparison": 96
+    },
+    "gold_support_count_distribution": {
+      "2": 500
+    },
+    "context_passage_count_distribution": {
+      "10": 498,
+      "2": 2
+    },
+    "unique_context_passage_count_distribution": {
+      "10": 498,
+      "2": 2
+    },
+    "expected_context_passages_per_question": 10,
+    "questions_with_expected_context_count": 498,
+    "questions_with_all_gold_supports_in_context": 500,
+    "questions_with_missing_gold_support_titles": 0,
+    "total_question_context_slots": 4984,
+    "question_ids_sha256": "8440283bb8c1c0840680b57b580790555b9a341a3a54884027a14c0b5b42f810",
+    "sorted_passage_ids_sha256": "e5fba7d953f5c5c1bd091741a6e7bc902d4b6e8eac1f9d2f973b6014c645b8db",
+    "note": "question_contexts are preserved in original order. passages.json is the deduplicated global corpus. Gold labels are used only for evaluation."
+  },
+  "question_count": 20,
+  "expected_context_count": 10,
+  "excluded_variable_context_question_ids": [
+    "5ab6d04c554299710c8d1f70",
+    "5ab3c7df55429969a97a81be"
+  ],
+  "limit": 20,
+  "question_type_counts": {
+    "bridge": 15,
+    "comparison": 5
+  },
+  "configs": [
+    "bm25",
+    "vanilla_tfidf",
+    "vanilla_bge",
+    "ppr_entity_lambda0.25",
+    "ppr_entity",
+    "ppr_entity_lambda0.75",
+    "ppr_chunk_lambda0.25",
+    "ppr_chunk",
+    "ppr_chunk_lambda0.75"
+  ],
+  "preregistered_configs": [
+    "bm25",
+    "ppr_chunk",
+    "ppr_entity",
+    "vanilla_bge"
+  ],
+  "headline_lambda": 0.5,
+  "lambdas": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seed_k": 5,
+  "ppr_alpha": 0.85,
+  "chunk_knn_k": 2,
+  "bm25": {
+    "impl": "rank_bm25.BM25Okapi",
+    "k1": 1.5,
+    "b": 0.75,
+    "tokenizer": "lowercase \\w+"
+  },
+  "dense_model": {
+    "model_id": "BAAI/bge-small-en-v1.5",
+    "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "device": "cpu",
+    "passage_cache": {
+      "new_embedding_count": 200,
+      "cache_hit_count": 0,
+      "embedding_compute_seconds": 3.0428944990001128,
+      "cache_path": "results/graph_ranking_v1/cache/embeddings/5c38ec7c405ec4b44b94cc5a9bb96e735b38267a/passages.npz"
+    },
+    "query_cache": {
+      "new_query_count": 20,
+      "cache_hit_count": 0,
+      "query_compute_seconds": 0.07828965199996674
+    }
+  },
+  "entity_extraction": {
+    "model": "en_core_web_sm",
+    "model_version": "3.8.0",
+    "requested_unique_passages": 200,
+    "cache_hits": 0,
+    "newly_extracted": 200,
+    "new_extraction_seconds": 4.2418345830021735,
+    "cache_load_and_prepare_seconds": 4.558280235999973
+  },
+  "stat_seed": 2027,
+  "bootstrap_replicates": 10000,
+  "sign_flip_draws": 20000,
+  "packages": {
+    "numpy": "2.5.5",
+    "networkx": "3.7",
+    "rank-bm25": "0.2.2",
+    "scikit-learn": "1.9.1",
+    "sentence-transformers": "6.3.0",
+    "torch": "2.15.0",
+    "transformers": "5.23.0",
+    "spacy": "3.8.18",
+    "en-core-web-sm": "3.8.0",
+    "python": "3.13.18"
+  },
+  "platform": "Linux-6.18.44-fc-v470-x86_64-with-glibc2.39",
+  "peak_rss_mb": 1669.75390625,
+  "total_seconds": 13.288287499000035
+}
