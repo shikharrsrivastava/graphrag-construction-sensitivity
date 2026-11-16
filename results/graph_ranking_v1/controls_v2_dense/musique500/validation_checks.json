@@ -1,0 +1,7 @@
+{
+  "question_count": 500,
+  "rows": 500,
+  "bge_ranking_recomputation_mismatches": 0,
+  "second_hop_queries_encoded": 0,
+  "second_hop_queries_cached": 2500
+}

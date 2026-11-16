@@ -50,11 +50,12 @@ Two controls were registered and run after the replication (complete-support@5, 
 | BGE | 0.354 | | |
 | Hybrid BGE+BM25 | 0.314 | −0.040 [−0.064, −0.016] vs BGE | 0.007 |
 | Hybrid + second-hop query (leave-one-out) | 0.324 | −0.030 [−0.053, −0.007] vs BGE | 0.029 |
-| LOO entity PPR | 0.475 | +0.151 [+0.121, +0.181] vs second-hop hybrid | 0.0003 |
+| Dense-only second-hop (no BM25; PREREGISTRATION_controls_v2.md) | 0.369 | +0.015 [−0.006, +0.036] vs BGE | 0.20 |
+| LOO entity PPR | 0.475 | +0.151 [+0.121, +0.181] vs second-hop hybrid; **+0.106 [+0.078, +0.134] vs dense-only second-hop** | 0.0003; 0.0001 |
 | LOO entity PPR, **no title nodes** | 0.470 | +0.116 [+0.085, +0.146] vs BGE | 0.0003 |
 | LOO entity PPR vs no-title version | 0.475 vs 0.470 | +0.005 [−0.006, +0.017] | 0.50 |
 
-By the rules fixed in advance: the non-graph hybrid control recovers none of the gain (it is slightly worse than BGE), so the gain is **graph-specific relative to this control**; and **title nodes are not necessary**, as the gain survives with spaCy entities only. On HotpotQA, removing titles makes the method worse than BGE (−0.050 [−0.086, −0.014], Holm p = 0.046), and the hybrids are no different from BGE (+0.002, +0.004). These controls are one design each: a stronger non-graph second-hop method (for example a trained reranker) is untested.
+The BM25 half of the first control handicaps it on MuSiQue (BM25 0.170 vs BGE 0.354), so a dense-only second-hop control was added afterwards, on the reviewer's point, and pre-registered before it ran (disclosed in its file). By the rules fixed in advance, that fair control recovers about 12% of the LOO gain (threshold: half) and is beaten by LOO PPR, so the gain is **graph-specific relative to these controls**; and **title nodes are not necessary**, as the gain survives with spaCy entities only. On HotpotQA, removing titles makes the method worse than BGE (−0.050 [−0.086, −0.014], Holm p = 0.046), and the hybrids are no different from BGE (+0.002, +0.004). On HotpotQA the dense-only control is not better than BGE (−0.026, n.s.) and ties LOO PPR (−0.002). These controls are one design each: a stronger non-graph second-hop method (for example a trained reranker) is untested.
 
 ## Other exploratory results (unadjusted; descriptive)
 
@@ -70,7 +71,7 @@ By the rules fixed in advance: the non-graph hybrid control recovers none of the
 * **One small embedding model** (BGE-small, pinned) and one PPR setting (α = 0.85, top-5 seeds, λ = 0.5). The LOO effect may differ with stronger retrievers.
 * **spaCy entities are not validated** against human labels. The entity graph is co-occurrence plus title matching, with no relation typing.
 * **Retrieval only.** No answer generation, EM/F1 or faithfulness, so a retrieval gain is not shown to improve answers.
-* **The non-graph control is one design** (BGE+BM25 with a top-passage-augmented query); a stronger second-hop retriever might close some of the gap. The embedding-only analogue (chunk-graph LOO) did not help.
+* **The non-graph controls are two designs** (BGE+BM25 and dense-only, both with a top-passage-augmented query); a stronger second-hop retriever such as a trained reranker might close some of the gap and is untested.
 * **Two datasets, both Wikipedia-based**, with fixed samples: the HotpotQA questions are all "hard" and are not a simple random sample, and the MuSiQue questions are answerable, 20-paragraph ones. No 2WikiMultiHopQA run.
 * The LOO variant was conceived after seeing HotpotQA smoke-test top-5 change counts; whether accuracy was seen first cannot be verified from the repository. Its MuSiQue effect is replicated, but its λ, α and seed count were never varied.
 * This design (method, pre-registration and analysis) was drafted with an AI coding assistant and accepted by the project owner, because the originally intended patch was unavailable.

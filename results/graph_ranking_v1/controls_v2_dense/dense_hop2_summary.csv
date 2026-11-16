@@ -1,0 +1,13 @@
+group,config,metric,mean,ci95_low,ci95_high
+hotpot498,vanilla_bge,complete_support_at_5,0.8152610441767069,0.7811244979919679,0.8493975903614458
+hotpot498,vanilla_bge,recall_at_5,0.9056224899598394,0.8875502008032129,0.9236947791164659
+hotpot498,dense_hop2,complete_support_at_5,0.7891566265060241,0.7530120481927711,0.8253012048192772
+hotpot498,dense_hop2,recall_at_5,0.8905622489959839,0.8714859437751004,0.9096385542168675
+hotpot498,ppr_entity_loo,complete_support_at_5,0.7871485943775101,0.751004016064257,0.821285140562249
+hotpot498,ppr_entity_loo,recall_at_5,0.8845381526104418,0.8634538152610441,0.9046184738955824
+musique_pooled,vanilla_bge,complete_support_at_5,0.354,0.324,0.385
+musique_pooled,vanilla_bge,recall_at_5,0.6755,0.6585,0.6922520833333333
+musique_pooled,dense_hop2,complete_support_at_5,0.369,0.339,0.399
+musique_pooled,dense_hop2,recall_at_5,0.6601666666666668,0.64158125,0.6785
+musique_pooled,ppr_entity_loo,complete_support_at_5,0.475,0.444,0.506
+musique_pooled,ppr_entity_loo,recall_at_5,0.716,0.69683125,0.7355833333333333
