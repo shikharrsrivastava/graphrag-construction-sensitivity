@@ -52,4 +52,4 @@ HotpotQA citation:
 }
 ```
 
-The repository has not selected a license for original code. The upstream HotpotQA terms do not automatically determine the license for project code, BGE weights, entity graphs, embeddings, or every other derivative. Obtain rights/institutional review before redistributing raw text or benchmark-derived caches. BGE model weights are downloaded separately and are not included in this release candidate.
+The original code in this repository is released under the MIT License (see `LICENSE`), which covers the code only. The upstream HotpotQA terms do not automatically determine the license for project code, BGE weights, entity graphs, embeddings, or every other derivative. Obtain rights/institutional review before redistributing raw text or benchmark-derived caches. BGE model weights are downloaded separately and are not included in this release candidate.
