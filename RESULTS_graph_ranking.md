@@ -30,7 +30,7 @@ Holm correction is applied within each dataset over 6 tests (3 contrasts × comp
 
 ## Exploratory finding, then replicated
 
-The smoke test showed that uniform-seed PPR rarely moves non-seed passages. This was a mechanics check, and no accuracy was inspected. Before the full runs I logged one variant, `ppr_entity_loo`: each passage's graph score is the PPR mass it receives from the *other* seeds (leave-one-out). On `musique500` it raised complete-support@5 from 0.350 to 0.468 (+0.118, 90 questions better and 31 worse).
+The smoke test showed that uniform-seed PPR rarely moves non-seed passages. Before adding the variant I examined only top-5 change counts and graph statistics, and did not read the accuracy columns of the smoke output. This is my account; the smoke output files are committed, so it cannot be verified from the repository (see PREREGISTRATION_controls.md, section 7). Before the full runs I logged one variant, `ppr_entity_loo`: each passage's graph score is the PPR mass it receives from the *other* seeds (leave-one-out). On `musique500` it raised complete-support@5 from 0.350 to 0.468 (+0.118, 90 questions better and 31 worse).
 
 Because this was exploratory, a **replication was pre-registered and committed before it ran**. It used 500 new MuSiQue questions (seed 2028, no overlap) with unchanged code.
 
@@ -56,7 +56,7 @@ Because this was exploratory, a **replication was pre-registered and committed b
 * **spaCy entities are not validated** against human labels. The entity graph is co-occurrence plus title matching, with no relation typing.
 * **Retrieval only.** No answer generation, EM/F1 or faithfulness, so a retrieval gain is not shown to improve answers.
 * **Two datasets, both Wikipedia-based**, with fixed samples: the HotpotQA questions are all "hard" and are not a simple random sample, and the MuSiQue questions are answerable, 20-paragraph ones. No 2WikiMultiHopQA run.
-* The LOO variant was conceived after seeing HotpotQA mechanics (not accuracy). Its MuSiQue effect is replicated, but its λ, α and seed count were never varied.
+* The LOO variant was conceived after seeing HotpotQA smoke-test top-5 change counts; whether accuracy was seen first cannot be verified from the repository. Its MuSiQue effect is replicated, but its λ, α and seed count were never varied.
 * This design (method, pre-registration and analysis) was drafted with an AI coding assistant and accepted by the project owner, because the originally intended patch was unavailable.
 
 ## Conclusion
